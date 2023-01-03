@@ -1,9 +1,0 @@
-.viewer-container {
-    width: 100vw;
-    height: 100vh;
-    position: static;
-    top: 0;
-    left: 0;
-    z-index: 500;
-    background: dimgrey;
-}

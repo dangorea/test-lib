@@ -1,0 +1,131 @@
+import * as yup from "yup";
+import { TMP_HOTSPOT_NAME } from "../constants";
+import type { HotspotStaringPoint } from "../../../../../store/tours/types";
+
+export type Values = {
+  id: string;
+  title: string;
+  target: string;
+  icon: string;
+  color: string;
+  hotspotStartingPoint?: HotspotStaringPoint;
+  width: string;
+  height: string;
+  size?: string;
+};
+
+export const HOTSPOT_ICON_NAMES = [
+  "circle",
+  "left-down-1",
+  "left-down-2",
+  "left-down-3",
+  "left-down-4",
+  "left-down-5",
+  "left-down-6",
+  "left-down-7",
+  "left-down",
+  "left-up-1",
+  "left-up-2",
+  "left-up-3",
+  "left-up-4",
+  "left-up-5",
+  "left-up-6",
+  "left-up-7",
+  "left-up",
+  "down-7",
+  "downstairs-3",
+  "downstairs-7",
+  "right-down-1",
+  "right-down-2",
+  "right-down-3",
+  "right-down-4",
+  "right-down-5",
+  "right-down-6",
+  "right-down-7",
+  "right-down",
+  "right-up-1",
+  "right-up-2",
+  "right-up-3",
+  "right-up-4",
+  "right-up-5",
+  "right-up-6",
+  "right-up-7",
+  "right-up",
+  "upstairs-1",
+  "door-1",
+  "downstairs-4",
+  "link-4",
+  "downstairs-1",
+  "downstairs-6",
+  "left-5",
+  "downstairs",
+  "down-1",
+  "left-2",
+  "left-6",
+  "downstairs-2",
+  "down-6",
+  "upstairs-6",
+  "up-1",
+  "down",
+  "down-5",
+  "right-3",
+  "down-3",
+  "left",
+  "right-4",
+  "right-7",
+  "left-7",
+  "down-4",
+  "downstairs-5",
+  "upstairs-7",
+  "upstairs-4",
+  "door-2",
+  "left-1",
+  "upstairs-5",
+  "left-3",
+  "right-2",
+  "right-5",
+  "right-6",
+  "up-2",
+  "left-4",
+  "right",
+  "up-3",
+  "right-1",
+  "up-4",
+  "up-5",
+  "up-6",
+  "up-7",
+  "door-4",
+  "door",
+  "up",
+  "upstairs-2",
+  "down-2",
+  "door-3",
+  "upstairs-3",
+  "upstairs",
+];
+
+export const initialValues = {
+  id: TMP_HOTSPOT_NAME,
+  title: "",
+  target: "",
+  icon: HOTSPOT_ICON_NAMES[0],
+  color: "#ffffff",
+  hotspotStartingPoint: {
+    sphereId: "",
+    fov: "",
+    ath: "",
+    atv: "",
+    coverUrl: "",
+    previewUrl: "",
+    thumbUrl: "",
+  },
+  width: "0.26",
+  height: "0.26",
+};
+
+export const validationSchema = yup.object().shape({
+  title: yup.string().required("Required"),
+  target: yup.string().required("Required"),
+  icon: yup.string().required("Required"),
+  color: yup.string().required("Required"),
+});

@@ -1,21 +1,13 @@
-import React, { ReactElement, useEffect } from "react";
-import Viewer from "../Viewer";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { getCurrentTour, getMyTours } from "../../store/tours/selectors";
-import { getImage, getMyImages } from "../../store/images/selector";
+import React from "react";
+import { Provider } from "react-redux";
 import store from "../../store";
-import TourViewer from "../TourViewer";
-import {
-  requestFullTour,
-  requestMyTours,
-  setTourState,
-} from "../../store/tours/actions";
-import { Tour } from "../../store/types";
 import KrpanoWrapper from "./KrpanoWrapper";
+import { CONFIG } from "../../utils/config";
 
 interface Props {
   imageId: string;
   tourId: string;
+  apiUrl: string;
   isWidget?: any;
   borderStyle?: any;
   enableAutoplayTour?: any;
@@ -25,13 +17,18 @@ interface Props {
 const Krpano = ({
   imageId,
   tourId,
+  apiUrl,
   isWidget,
   borderStyle,
   enableAutoplayTour,
   isSideViewer,
 }: Props) => {
-  if (!imageId) {
-    return null;
+  CONFIG.apiUrl = apiUrl;
+
+  console.log("test", { imageId, tourId, apiUrl });
+
+  if (!imageId && !apiUrl) {
+    return <>Error</>;
   }
 
   return (

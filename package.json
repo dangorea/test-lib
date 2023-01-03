@@ -1,6 +1,6 @@
 {
   "name": "@dangorea/test-lib",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Krpano interface",
   "scripts": {
     "rollup": "rollup -c"

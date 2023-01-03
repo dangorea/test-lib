@@ -9,7 +9,12 @@ import { getImage } from "../../store/images/selector";
 import { getMyImage } from "../../store/tours/selectors";
 import { getWidgetSettings } from "../../store/widget/actions";
 
-function KrpanoWrapper({ imageId, tourId }: any) {
+type Props = {
+  imageId: string;
+  tourId: string;
+};
+
+function KrpanoWrapper({ imageId, tourId }: Props) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setViewerImageId(imageId));

@@ -23,11 +23,13 @@ export enum USER_TYPES {
   AGENCY = "AGENCY",
 }
 
+// apiUrl: "https://api.wix.viar.live/api/v1/",
+
 export const CONFIG = {
   awsKey: "AKIAJCJRVV7KDOE56BRA",
   awsUrl: "//s3-us-west-2.amazonaws.com",
   awsBucket: "test.static.a.viar.live",
-  apiUrl: "https://api.wix.viar.live/api/v1/",
+  apiUrl: "",
   storageUrl: "https://ddn1wrsew90bv.cloudfront.net",
   embedUrl: "https://wix.viar.live/embed",
   appUrl: "https://wix.viar.live",
@@ -49,8 +51,6 @@ export const CONFIG = {
 };
 
 axios.defaults.baseURL = CONFIG.apiUrl;
-
-console.log("testConfig>>>>", { CONFIG, axios });
 
 export const VIEWER_CONFIG = {
   SCRIPT_PATH: `${CONFIG.krpanoUrl}/tour.js`,

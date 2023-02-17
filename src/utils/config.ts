@@ -1,10 +1,6 @@
 import { EffectCallback, useEffect } from "react";
 import type { CreateConfig } from "evaporate";
-import axios from "axios";
-import { requestFullTour, requestMyTours } from "../store/tours/actions";
-import { requestMyImages } from "../store/images/actions";
-import { setViewerImageId } from "../store/viewer/actions";
-import { useDispatch } from "react-redux";
+// import axios, { AxiosRequestConfig } from "axios";
 
 interface CustomEvaporateConfig extends CreateConfig {
   signHeaders: {
@@ -29,7 +25,7 @@ export const CONFIG = {
   awsKey: "AKIAJCJRVV7KDOE56BRA",
   awsUrl: "//s3-us-west-2.amazonaws.com",
   awsBucket: "test.static.a.viar.live",
-  apiUrl: "",
+  apiUrl: "https://api.wix.viar.live/api/v1/",
   storageUrl: "https://ddn1wrsew90bv.cloudfront.net",
   embedUrl: "https://wix.viar.live/embed",
   appUrl: "https://wix.viar.live",
@@ -38,7 +34,7 @@ export const CONFIG = {
   auth0ClientId: "B7tDv5YaGY4Y0rFU8nnVIZmCz1kaNjGF",
   token:
     "Viarlive eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ3aXh8NGQwY2YwODUtYTJhNC00Yjg1LTg5MTYtNDAxMjQ5N2FmZWFmIiwiYXVkIjoiQjd0RHY1WWFHWTRZMHJGVThublZJWm1DejFrYU5qR0YiLCJ1c2VyX2lkIjoid2l4fDRkMGNmMDg1LWEyYTQtNGI4NS04OTE2LTQwMTI0OTdhZmVhZiIsImlzcyI6Imh0dHBzOi8vbGlzdDNkLmF1dGgwLmNvbS8iLCJleHAiOjE2MzM2Mjc1NzQsImlhdCI6MTYzMzU5MTU3NH0.J0XrCv5FnKmXwD_1Dzpwmjb3V6PwxkIj1JZOT7HnTIy1O1tk2COumUGyvJVCsOKi5h2kQNduUGqN-lJDc6obZFVVTLiJxDetApLV1-uRrCr58ZTpLW9h8flBerxxl9OzkmtkPx79I9_UBkG84xOzdZVaxH1OiG4BYn414Y3H9Yy1jlFGdFiyNmQ0cfbr27linzz6U7k3XPWwbPr0G-U3uKCoYTE7t3jZpTI43xqyTVwWXMefuOpMkJGLyVudfnaeCZOod1cqdt1UVCqnZv4GcCsOth6H1EjgZPeqSnc0xuk7n8t_yr_KlCqZxlMXOv_z6yYlrIIZToWG9EULtNMD8w",
-  client: "wix",
+  client: "",
   facebookAppId: "361224084210512",
   userType: "DEMO",
   subscriptionPlan: {
@@ -50,7 +46,18 @@ export const CONFIG = {
   },
 };
 
-axios.defaults.baseURL = CONFIG.apiUrl;
+// TODO remove if not used
+// const AxiosConfig = <AxiosRequestConfig>{
+//   // method: "get",
+//   // url: "https://viar.live/api/v1/tour/tl9e9r?full=true",
+//   headers: {
+//     Authorization: "",
+//     "Content-Type": "application/json",
+//     "Accept-Encoding": "",
+//   },
+//   responseType: "json",
+//   responseEncoding: "utf8",
+// };
 
 export const VIEWER_CONFIG = {
   SCRIPT_PATH: `${CONFIG.krpanoUrl}/tour.js`,

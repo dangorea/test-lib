@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { Dispatch } from "redux";
-// @ts-ignore
 import Wix from "wix-sdk";
 import jwt_decode from "jwt-decode";
 

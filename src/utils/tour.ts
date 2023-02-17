@@ -57,11 +57,13 @@ export const getHotspotFromProductHotspot = (
 export const transformFullTourSphereLinks = (tour: Tour): Tour => {
   tour.spheres.forEach((sphere) => {
     const links = sphere.links.map((link) => getHotspotFromLinkHotspot(link));
-    const products = sphere.wixProducts.map((link) =>
-      getHotspotFromProductHotspot(link)
-    );
-
-    sphere.hotSpots = sphere.hotSpots.concat(links, products);
+    if (sphere.hasOwnProperty("wixProducts")) {
+      const products = sphere.wixProducts.map((link) =>
+        getHotspotFromProductHotspot(link)
+      );
+      sphere.hotSpots = sphere.hotSpots.concat(links, products);
+    }
+    sphere.hotSpots = sphere.hotSpots.concat(links);
   });
   return tour;
 };

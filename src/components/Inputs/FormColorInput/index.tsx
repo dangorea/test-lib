@@ -1,42 +1,84 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from "react";
+// import {
+//   ColorInput,
+//   FormField as WixFormField,
+//   PopoverProps,
+//   Text,
+// } from "wix-style-react";
+import { useField } from "formik";
 import {
-  ColorInput,
-  FormField as WixFormField,
-  PopoverProps,
-  Text,
-} from 'wix-style-react';
-import { useField } from 'formik';
-import { FormFieldWrapper } from '../FormField/styles';
-import type { ColorInputProps } from 'wix-style-react/dist/es/src/ColorInput';
+  Input,
+  InputContainer,
+  InputPadding,
+  InputWrapper,
+  Picker,
+  Popover,
+  Swatch,
+  TagContainer,
+  FormFieldWrapper,
+  Label,
+} from "./styles";
+import useOutsideAction from "../../../utils/hooks/useOutsideAction";
+import ColorPicker from "./ColorPicker";
+import useOpen from "../../../utils/hooks/useOpen";
 
 type Props = {
   label: string;
   name: string;
   required?: boolean;
-} & Partial<ColorInputProps>;
+};
 
-const FormColorInput: FC<Props> = ({
-  label,
-  name,
-  required = false,
-  ...props
-}) => {
-  const [field, meta, helpers] = useField(name);
+const FormColorInput: FC<Props> = ({ label, name, required = false }) => {
+  const [field, _, helpers] = useField(name);
+  const popover = useRef(null);
+  const { open, handleOpen, handleClose } = useOpen();
+
+  useOutsideAction(popover, handleClose);
 
   return (
     <FormFieldWrapper>
+      <Label id={name}>
+        <span>{label}</span>
+      </Label>
+      <Picker>
+        <InputWrapper>
+          <InputContainer onClick={handleOpen}>
+            <InputPadding>
+              <TagContainer>#</TagContainer>
+              <Input
+                value={field.value.replace("#", "").toUpperCase()}
+                onChange={(e) => helpers.setValue(`#${e.target.value}`)}
+                required={required}
+              />
+              <Swatch style={{ backgroundColor: field.value }} /*onClick={}*/ />
+            </InputPadding>
+          </InputContainer>
+        </InputWrapper>
+        <Popover ref={popover}>
+          <ColorPicker
+            open={open}
+            field={field.value}
+            helpers={helpers.setValue}
+            handleClose={handleClose}
+          />
+        </Popover>
+      </Picker>
+    </FormFieldWrapper>
+
+    /*<FormFieldWrapper>
+      {/!*TODO Fix here*!/}
       <WixFormField
         label={<Text light>{label}</Text>}
         id={name}
         required={required}
       >
         <ColorInput
-          status={meta.touched && meta.error ? 'error' : undefined}
+          status={meta.touched && meta.error ? "error" : undefined}
           statusMessage={meta.error}
           popoverAppendTo="scrollParent"
           popoverProps={
             {
-              placement: 'auto',
+              placement: "auto",
             } as Partial<PopoverProps>
           }
           id={name}
@@ -46,7 +88,7 @@ const FormColorInput: FC<Props> = ({
           onChange={(color) => helpers.setValue(color)}
         />
       </WixFormField>
-    </FormFieldWrapper>
+    </FormFieldWrapper>*/
   );
 };
 

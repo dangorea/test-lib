@@ -5,12 +5,12 @@ import {
   InputWrapper,
 } from "./styles";
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { FileUpload, Loader } from "wix-style-react";
+// import { FileUpload, Loader } from "wix-style-react";
 import {
   BottomBtnsWrapper,
   SaveBtn,
   UploadBtn,
-} from "../../TourViewer/EditTour/EditActions/AddFloorPlan/styles";
+} from "../../../containers/TourViewer/EditTour/EditActions/AddFloorPlan/styles";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addFloorPlanDotsToLink,
@@ -19,14 +19,14 @@ import {
 } from "../../../store/tours/actions";
 import { getTourId } from "../../../store/viewer/selectors";
 import { errorNotification } from "../../../store/notifications/actions";
-// import downloadIcon from "../../../assets/icons/downloadIcon.svg";
-// import saveIcon from "../../../assets/icons/saveIcon.svg";
-import ImageContainer from "../../TourViewer/EditTour/EditActions/AddFloorPlan/ActionModal/ImageContainer";
-// import ImageIcon from "../../../assets/icons/img-icon.svg";
+import downloadIcon from "../../../assets/icons/downloadIcon.svg";
+import saveIcon from "../../../assets/icons/saveIcon.svg";
+import ImageContainer from "../../../containers/TourViewer/EditTour/EditActions/AddFloorPlan/ActionModal/ImageContainer";
+import ImageIcon from "../../../assets/icons/img-icon.svg";
 import type { Level, Link } from "../../../store/types";
-import ImageCarousel from "./components/index";
+import ImageCarousel from "./components";
 import { CONFIG } from "../../../utils/config";
-import CheckboxButton from "../../TourViewer/EditTour/EditActions/AddFloorPlan/components/CheckboxBtn";
+import CheckboxButton from "../../../containers/TourViewer/EditTour/EditActions/AddFloorPlan/components/CheckboxBtn";
 import { getLevels } from "../../../store/tours/selectors";
 import { v4 as uuid } from "uuid";
 
@@ -148,6 +148,7 @@ const FloorPlanInput: FC<Props> = ({
 
   useEffect(() => {
     levels &&
+      CONFIG.client !== "viarLive" &&
       setUploadedImage(
         levels?.map((level) => ({
           ...level,
@@ -186,18 +187,18 @@ const FloorPlanInput: FC<Props> = ({
 
   return (
     <>
-      <ImageContainer
-        key={uuid().slice(0, 8)}
-        selectedImage={selectedImage}
-        savedPosition={savedPosition}
-        setSavedPosition={setSavedPosition}
-        toggle={toggle}
-      />
+      {/*<ImageContainer*/}
+      {/*  key={uuid().slice(0, 8)}*/}
+      {/*  selectedImage={selectedImage}*/}
+      {/*  savedPosition={savedPosition}*/}
+      {/*  setSavedPosition={setSavedPosition}*/}
+      {/*  toggle={toggle}*/}
+      {/*/>*/}
       <InputContainer>
         <InputWrapper>
           <ImageTitleLabel>Add image title</ImageTitleLabel>
           <ImageInput
-            image={"ImageIcon"}
+            image={ImageIcon}
             value={titleInput?.title}
             onChange={(e) =>
               setTitleInput({ title: e.target.value, edited: true })
@@ -229,23 +230,23 @@ const FloorPlanInput: FC<Props> = ({
           </>
         )}
         <BottomBtnsWrapper>
-          <FileUpload
-            onChange={(e) => (
-              !!uploadedImage?.length
-                ? // @ts-ignore
-                  setUploadedImage?.([...uploadedImage, ...e])
-                : setUploadedImage?.(e),
-              setUploadAction(true)
-            )}
-            accept=".jpeg,.jpg,.png"
-          >
-            {({ openFileUploadDialog }) => (
-              <UploadBtn onClick={openFileUploadDialog}>
-                <img src={"downloadIcon"} alt="error"></img>
-                <span>Upload</span>
-              </UploadBtn>
-            )}
-          </FileUpload>
+          {/*TODO fix here*/}
+          {/*<FileUpload*/}
+          {/*  onChange={(e) => (*/}
+          {/*    !!uploadedImage?.length*/}
+          {/*      ? setUploadedImage?.([...uploadedImage, ...e])*/}
+          {/*      : setUploadedImage?.(e),*/}
+          {/*    setUploadAction(true)*/}
+          {/*  )}*/}
+          {/*  accept=".jpeg,.jpg,.png"*/}
+          {/*>*/}
+          {/*  {({ openFileUploadDialog }) => (*/}
+          {/*    <UploadBtn onClick={openFileUploadDialog}>*/}
+          {/*      <img src={downloadIcon} alt="error"></img>*/}
+          {/*      <span>Upload</span>*/}
+          {/*    </UploadBtn>*/}
+          {/*  )}*/}
+          {/*</FileUpload>*/}
           {!!uploadedImage?.length && (
             <SaveBtn
               onClick={() => {
@@ -265,10 +266,11 @@ const FloorPlanInput: FC<Props> = ({
               }}
             >
               {uploadAction ? (
-                <Loader size="small" />
+                // <Loader size="small" />
+                <>Loading</>
               ) : (
                 <>
-                  <img src={"saveIcon"} alt="" />
+                  <img src={saveIcon} alt="" />
                   <span>Save</span>
                 </>
               )}

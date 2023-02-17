@@ -3,8 +3,9 @@ import type { State } from "./types";
 
 export const getViewerImageId =
   () =>
-  (state: RootState): State["imageId"] =>
-    state?.viewer?.imageId;
+  (state: RootState): State["imageId"] => {
+    return state?.viewer?.imageId;
+  };
 
 export const getTourId =
   () =>

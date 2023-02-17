@@ -1,3 +1,5 @@
+import type { Image360, RootState } from "../types";
+
 export const getIsImagesLoading =
   () =>
   (state: any): boolean =>
@@ -5,18 +7,20 @@ export const getIsImagesLoading =
 
 export const getMyImages =
   () =>
-  (state: any): any => {
-    return state.images.data.items;
+  (state: RootState): Image360[] => {
+    const { page, items } = state.images.data;
+
+    return page?.map((id) => items[id]) || [];
   };
 
 export const getImage =
   (imgId: string) =>
-  (state: any): any | null =>
+  (state: RootState): Image360 | null =>
     state.images.data.items?.[imgId];
 
 export const getImages =
   (imgIds: string[]) =>
-  (state: any): (any | null)[] =>
+  (state: RootState): (Image360 | null)[] =>
     imgIds.map((id) => getImage(id)(state));
 
 export const getImageTitles =

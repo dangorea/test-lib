@@ -1,6 +1,6 @@
 import { createRequestTypes } from "../utils";
 
-const c = {
+const TOUR_CONSTANTS = {
   ...createRequestTypes("GET_MY_TOURS"),
   ...createRequestTypes("UPDATE_TOUR"),
   ...createRequestTypes("DELETE_TOUR"),
@@ -20,9 +20,11 @@ const c = {
   ...createRequestTypes("UPDATE_FLOOR_LEVEL_LINK"),
   ...createRequestTypes("DELETE_FLOOR_LEVEL_LINK"),
   ...createRequestTypes("SET_CURRENT_TOUR"),
+  ...createRequestTypes("GET_ICONS"),
+  ...createRequestTypes("DELETE_ICONS"),
 };
 
-export default c;
+export default TOUR_CONSTANTS;
 
 export enum TOUR_ACTIONS {
   DELETE = "DELETE",

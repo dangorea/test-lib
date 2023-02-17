@@ -1,4 +1,5 @@
 import type { CommonState, PaginationMetadata, Tour } from "../../utils/types";
+import type { Icon } from "../types";
 
 export interface State extends CommonState {
   data:
@@ -8,7 +9,7 @@ export interface State extends CommonState {
       }
     | Record<string, never>;
   currentTour: Tour | null;
-  test: string;
+  icons: Icon[];
 }
 
 export type SphereViewOptions = {

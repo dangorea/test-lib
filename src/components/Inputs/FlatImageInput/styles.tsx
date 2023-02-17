@@ -1,6 +1,11 @@
 import styled from "styled-components";
-import { Drawer } from "../../MyImages/Actionbar/UploadDrawer/styles";
-import { Heading } from "wix-style-react";
+import { Drawer } from "../../../containers/MyImages/Actionbar/UploadDrawer/styles";
+// import { Heading } from "wix-style-react";
+
+export const FormFieldWrapper = styled.div`
+  //margin-top: 10px;
+  //margin-bottom: 10px;
+`;
 
 export const SphereSelectDrawer = styled(Drawer)`
   display: flex;
@@ -22,7 +27,8 @@ export const PreviewItemWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const DrawerTitle = styled(Heading)`
+// TODO maybe fix here
+export const DrawerTitle = styled("title")`
   text-align: center;
   margin-bottom: 20px;
 `;

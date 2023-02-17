@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import { useField } from "formik";
-import { DropdownLayout } from "wix-style-react";
+// import { DropdownLayout } from "wix-style-react";
 import FormField from "../FormField";
 import { useDebounce } from "../../../utils/hooks/useDebounce";
-import { ProductInfo } from "../../TourViewer/EditTour/EditActions/AddProducts/components/ProductInfo";
+import { ProductInfo } from "../../../containers/TourViewer/EditTour/EditActions/AddProducts/components/ProductInfo";
 import Wix from "wix-sdk";
 import {
   getProductById,
@@ -11,17 +11,16 @@ import {
 } from "../../../utils/services/products";
 import type { Product } from "../../../store/types";
 import {
-  ParentSpinnerBlock,
   SearchSpinner,
   SearchSpinnerBlock,
-  Spinner,
-  SpinnerBlock,
-} from "../../TourViewer/EditTour/EditActions/AddProducts/components/Style";
+} from "../../../containers/TourViewer/EditTour/EditActions/AddProducts/components/styles";
+import Loader from "../../Loader";
 
 type Props = {
   name: string;
   required: boolean;
 } & Partial<any>;
+1;
 
 const Index: FC<Props> = ({
   label,
@@ -39,7 +38,7 @@ const Index: FC<Props> = ({
   const [selectedHotspot, setSelectedHotspot] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [productsLoading, setProductsLoading] = useState<boolean>(false);
-  const instanceId = Wix.Utils.getInstanceId();
+  // const instanceId = Wix.Utils.getInstanceId();
   const debounce = useDebounce(searchItem, 300);
   const productId: string = props.currentHotspot.target;
 
@@ -52,59 +51,60 @@ const Index: FC<Props> = ({
       setSelectedProduct({}));
   }, [eventHandler]);
 
-  useEffect(() => {
-    if (instanceId && debounce) {
-      setProductsLoading(true);
-      void requestWixProducts({
-        instanceId,
-        name: debounce,
-      }).then((res) => {
-        if (res) {
-          setProductsData(Object.assign([], { ...res }));
-          setDisplayState(true);
-          setSelectedProduct({});
-          setSelectedHotspot({});
-        }
-        setProductsLoading(false);
-      });
-    } else {
-      setProductsData([]);
-      setProductsLoading(false);
-    }
-  }, [instanceId, debounce]);
-
-  useEffect(() => {
-    if (instanceId && productId) {
-      setIsLoading(true);
-      void getProductById({
-        instanceId,
-        wixProductId: productId,
-      })
-        .then((res) => {
-          if (res) {
-            setSelectedHotspot(res);
-            setIsLoading(false);
-          }
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [instanceId, productId]);
-
+  // useEffect(() => {
+  //   if (instanceId && debounce) {
+  //     setProductsLoading(true);
+  //     void requestWixProducts({
+  //       instanceId,
+  //       name: debounce,
+  //     }).then((res) => {
+  //       if (res) {
+  //         setProductsData(Object.assign([], { ...res }));
+  //         setDisplayState(true);
+  //         setSelectedProduct({});
+  //         setSelectedHotspot({});
+  //       }
+  //       setProductsLoading(false);
+  //     });
+  //   } else {
+  //     setProductsData([]);
+  //     setProductsLoading(false);
+  //   }
+  // }, [instanceId, debounce]);
+  //
+  // useEffect(() => {
+  //   if (instanceId && productId) {
+  //     setIsLoading(true);
+  //     void getProductById({
+  //       instanceId,
+  //       wixProductId: productId,
+  //     })
+  //       .then((res) => {
+  //         if (res) {
+  //           setSelectedHotspot(res);
+  //           setIsLoading(false);
+  //         }
+  //       })
+  //       .catch(() => {
+  //         setIsLoading(false);
+  //       });
+  //   }
+  // }, [instanceId, productId]);
+  // TODO Fix here
   return (
     <>
       <FormField
+        placeholder="Add your product name here"
         label={label}
         name={name}
-        placeholder="Type here"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          setInput("");
-          setSearchItem(e.target.value);
-          setIsLoading(false);
-          setSelectedProduct({});
-        }}
-        value={input === "" ? searchItem : input}
+        // placeholder="Type here"
+        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        //   setInput("");
+        //   setSearchItem(e.target.value);
+        //   setIsLoading(false);
+        //   setSelectedProduct({});
+        /*}}*/
+        // value={input === "" ? searchItem : input}
         required={required}
         {...props}
       />
@@ -117,23 +117,24 @@ const Index: FC<Props> = ({
       ) : (
         displayState && (
           <>
-            <DropdownLayout
-              options={productsData.map((product: any) => {
-                return { ...product, value: product?.name };
-              })}
-              visible
-              onSelect={(el) => {
-                setSelectedProduct(el);
-                setDisplayState(!displayState);
-                setInput(el.value as string);
-                setSearchItem("");
-                setProductsData([]);
-                helpers.setValue(el.id);
-                setIsLoading(false);
-                setSelectedHotspot({});
-              }}
-              inContainer
-            />
+            {/*TODO fix here*/}
+            {/*<DropdownLayout*/}
+            {/*  options={productsData.map((product: any) => {*/}
+            {/*    return { ...product, value: product?.name };*/}
+            {/*  })}*/}
+            {/*  visible*/}
+            {/*  onSelect={(el) => {*/}
+            {/*    setSelectedProduct(el);*/}
+            {/*    setDisplayState(!displayState);*/}
+            {/*    setInput(el.value as string);*/}
+            {/*    setSearchItem("");*/}
+            {/*    setProductsData([]);*/}
+            {/*    helpers.setValue(el.id);*/}
+            {/*    setIsLoading(false);*/}
+            {/*    setSelectedHotspot({});*/}
+            {/*  }}*/}
+            {/*  inContainer*/}
+            {/*/>*/}
           </>
         )
       )}
@@ -147,13 +148,7 @@ const Index: FC<Props> = ({
         productsData && (
           <ProductInfo key={selectedHotspot.id} product={selectedHotspot} />
         )}
-      {isLoading && (
-        <ParentSpinnerBlock>
-          <SpinnerBlock>
-            <Spinner />
-          </SpinnerBlock>
-        </ParentSpinnerBlock>
-      )}
+      {isLoading && <Loader />}
     </>
   );
 };

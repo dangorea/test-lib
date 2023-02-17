@@ -17,6 +17,10 @@ export interface RootState {
   notifications: NotificationsState;
   viewer: ViewerState;
   widget: WidgetState;
+  config: {
+    source: string;
+    bucket: string;
+  };
 }
 
 export type StartingPoint = {

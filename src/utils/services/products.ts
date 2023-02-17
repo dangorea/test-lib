@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
-import type { Product } from '../../store/types';
+import axios, { AxiosResponse } from "axios";
+import type { Product } from "../../store/types";
 
 export const getProductById = ({
   instanceId,
@@ -31,7 +31,6 @@ export const requestWixProducts = ({
       { name }
     )
     .then((res: AxiosResponse<{ products: Product }>) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       return res.data.products;
     })
     .catch((error) => console.log(error));

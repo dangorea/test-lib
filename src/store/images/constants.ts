@@ -8,6 +8,7 @@ const c: { [action: string]: string } = {
   ...createRequestTypes("DELETE_MANY_IMAGES"),
   ...createRequestTypes("SET_STARTING_POINT"),
   ...createRequestTypes("SET_IMAGE_STATE"),
+  SET_UPLOAD_PROGRESS: "SET_UPLOAD_PROGRESS",
 };
 
 export default c;

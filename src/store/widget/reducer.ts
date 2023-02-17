@@ -1,10 +1,12 @@
-import type { AnyAction } from 'redux';
+import type { AnyAction } from "redux";
 
-import c from './constants';
-import type { Reducers } from '../types';
-import type { Font, State } from './types';
+import c from "./constants";
+import type { Reducers } from "../types";
+import type { Font, State } from "./types";
 
-import { successReducer, errorReducer, requestReducer } from '../utils';
+import { successReducer, errorReducer, requestReducer } from "../utils";
+import { createSlice } from "@reduxjs/toolkit";
+import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState: State = {
   isLoading: false,
@@ -17,43 +19,43 @@ export const initialState: State = {
     spt: true,
     showVr: true,
     sn: true,
-    manageTours: 'tyvwqn',
-    source: 'wix',
+    manageTours: "tyvwqn",
+    source: "wix",
     showBorder: false,
     borderColor: {
-      color: '#ffffff',
+      color: "#ffffff",
       opacity: 1,
     },
     borderWidth: 0,
     tfa: {
-      color: '#ffffff',
+      color: "#ffffff",
       opacity: 1,
-      editorKey: '',
-      family: 'ABeeZee',
+      editorKey: "",
+      family: "ABeeZee",
       fontStyleParam: true,
-      preset: 'Paragraph 1',
+      preset: "Paragraph 1",
       size: 16,
       style: {
         bold: false,
         italic: false,
         underline: false,
       },
-      value: '',
+      value: "",
     },
     photoData: {
-      color: '#ffffff',
+      color: "#ffffff",
       opacity: 1,
-      editorKey: '',
-      family: 'ABeeZee',
+      editorKey: "",
+      family: "ABeeZee",
       fontStyleParam: true,
-      preset: 'Paragraph 2',
+      preset: "Paragraph 2",
       size: 13,
       style: {
         bold: false,
         italic: false,
         underline: false,
       },
-      value: '',
+      value: "",
     },
   },
 };
@@ -67,7 +69,7 @@ const reducers: Reducers<State> = {
   [c.UPDATE_WIDGET_SETTINGS_SUCCESS]: (state: State, payload: any): State => {
     const { key, value } = payload;
 
-    if (key === 'tfa' || key === 'photoData') {
+    if (key === "tfa" || key === "photoData") {
       return {
         ...state,
         data: {
@@ -107,3 +109,20 @@ const widgetReducer = (state = initialState, action: AnyAction): State => {
 };
 
 export default widgetReducer;
+
+// export default createSlice({
+//   name: "widgetReducer",
+//   initialState,
+//   reducers: {
+//     widgetReducer,
+//   },
+//   extraReducers: {
+//     [HYDRATE]: (state, action) => {
+//       console.log("HYDRATE", { state, action });
+//       return {
+//         ...state,
+//         ...action.payload,
+//       };
+//     },
+//   },
+// });

@@ -6,9 +6,9 @@ import type { Hotspot } from "../../store/tours/types";
 import { HOTSPOT_TYPES } from "../../store/tours/types";
 
 import { CONFIG, Krpano } from "../config";
-import { TMP_HOTSPOT_NAME } from "../../components/TourViewer/EditTour/EditActions/constants";
+import { TMP_HOTSPOT_NAME } from "../../containers/TourViewer/EditTour/EditActions/constants";
 import type { Icon } from "../../store/types";
-import { isJsonString } from "../../store/icons/actions";
+import { isJsonString } from "../../store/tours/actions";
 
 export const getHotspotIconUrl = ({
   style,
@@ -18,7 +18,8 @@ export const getHotspotIconUrl = ({
 }: Hotspot): string => {
   if (isJsonString(style)) {
     const icon: Icon = JSON.parse(style);
-    return `${CONFIG.storageUrl}/media/${icon.id}/${icon.name}`;
+    return `${CONFIG.storageUrl}/media/${icon.id}/media.png?v=${icon.createdAt}`;
+    // return `${CONFIG.storageUrl}/media/${icon.id}/${icon.name}`;
   }
 
   if (type === HOTSPOT_TYPES.FLAT && target) {

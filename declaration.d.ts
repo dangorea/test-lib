@@ -9,6 +9,14 @@ declare module "*.svg" {
   export default src;
 }
 
-declare module "wix-sdk";
-
 declare module "*.png";
+
+declare module "wix-ui-icons-common";
+
+declare module "wix-ui-icons-common";
+
+// declare module "redux" {
+//   export interface Dispatch<A extends Action = AnyAction> {
+//     <T extends A>(action: T | Dispatch): T | Promise<T> | Promise<void>;
+//   }
+// }

@@ -4,8 +4,9 @@ import type {
   PaginationMetadata,
   RootState,
   Tour,
-} from "../../utils/types";
+} from "../types";
 import type { Hotspot, State } from "./types";
+import type { Icon } from "../types";
 
 export const getIsToursLoading =
   () =>
@@ -63,6 +64,16 @@ export const getHotspot =
     return sphere?.hotSpots.find(({ id: hId }) => hId === hotspotId);
   };
 
+export const getHotspots =
+  (sphereId: string) =>
+  (state: RootState): Hotspot[] | undefined => {
+    const sphere = state.tours.currentTour?.spheres.find(
+      ({ id: sId }) => sId === sphereId
+    );
+
+    return sphere?.hotSpots;
+  };
+
 export const getAllSpheres =
   () =>
   (state: RootState): Array<Image360> | undefined =>
@@ -72,3 +83,13 @@ export const getLevels =
   () =>
   (state: RootState): Level[] | [] =>
     state.tours.currentTour?.tourFloorPlan.levels || [];
+
+export const getIcons =
+  () =>
+  (state: RootState): Icon[] | [] =>
+    state.tours.icons;
+
+export const getCurrentTourId =
+  () =>
+  (state: RootState): string | undefined =>
+    state.tours.currentTour?.id;

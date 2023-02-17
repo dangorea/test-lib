@@ -9,7 +9,6 @@ import {
   errorNotification,
   successNotification,
 } from "../notifications/actions";
-import { State } from "./types";
 
 const BASE_ENDPOINT = "sphere";
 
@@ -59,6 +58,8 @@ export const uploadImage =
       )(dispatch);
 
       await updateImage(id, { status: IMAGE_STATUSES.UPLOADING })(dispatch);
+
+      EVAPORATE_CONFIG.bucket = `${getState().config.bucket}/spheres`;
 
       const evaporate = await Evaporate.create(EVAPORATE_CONFIG);
 
@@ -133,6 +134,7 @@ export const updateImage =
     try {
       dispatch({ type: c.PUT_IMAGE_REQUEST });
       const res = await axios.put(`${BASE_ENDPOINT}/${id}`, updatedData);
+
       dispatch({ type: c.PUT_IMAGE_SUCCESS, payload: res.data });
       dispatch(successNotification("Image updated"));
       cb?.();

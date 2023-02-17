@@ -88,11 +88,10 @@ const ImageCarousel: FC<Props> = ({
               enabled: false,
             }}
           >
-            {/*// @ts-ignore*/}
+            {/*TODO fix here*/}
             {Array.from(image)?.map((item, index) => {
               return (
                 <SwiperSlide
-                  // @ts-ignore
                   key={item.id || uuid().slice(0, 8)}
                   style={{
                     alignSelf: "center",
@@ -102,14 +101,11 @@ const ImageCarousel: FC<Props> = ({
                     <IconDeleteElement
                       onClick={() => {
                         setImage(
-                          // @ts-ignore
-                          Array.from(image)?.filter((_item, itemIndex) => {
+                          Array.from(image)?.filter((item, itemIndex) => {
                             return itemIndex !== index;
                           })
                         );
-                        // @ts-ignore
                         if (item.id) {
-                          // @ts-ignore
                           dispatch(deleteFloorPlanLevel(tourId, item.id));
                         }
                       }}
@@ -119,7 +115,6 @@ const ImageCarousel: FC<Props> = ({
                       </UnlinkBtn>
                     </IconDeleteElement>
                     <img
-                      // @ts-ignore
                       className={item?.id === selectedImage?.id ? "active" : ""}
                       src={imageSwitch(item)}
                       alt=""

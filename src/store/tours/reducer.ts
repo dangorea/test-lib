@@ -1,4 +1,4 @@
-import c from "./constants";
+import TOUR_CONSTANTS from "./constants";
 import type { AnyAction } from "redux";
 import {
   emptySuccessReducer,
@@ -9,30 +9,33 @@ import {
 import type { Reducers, Tour } from "../../utils/types";
 import type { Hotspot, State } from "./types";
 import { HOTSPOT_TYPES } from "./types";
+import { transformFullTourSphereLinks } from "../../utils/tour";
+import { HYDRATE } from "next-redux-wrapper";
+import { Icon, Link } from "../types";
 
 const initialState: State = {
   data: {},
   isLoading: false,
   error: null,
   currentTour: null,
-  test: "tour state test",
+  icons: [],
 };
 
-const reducers: Reducers<State> = {
-  [c.GET_MY_TOURS_REQUEST]: requestReducer,
-  [c.GET_MY_TOURS_ERROR]: errorReducer,
-  [c.GET_MY_TOURS_SUCCESS]: successReducer,
-  [c.UPDATE_TOUR_COVER_REQUEST]: requestReducer,
-  [c.UPDATE_TOUR_COVER_ERROR]: errorReducer,
-  [c.UPDATE_TOUR_COVER_SUCCESS]: emptySuccessReducer,
-  [c.UPDATE_TOUR_STARTING_POINT_REQUEST]: requestReducer,
-  [c.UPDATE_TOUR_STARTING_POINT_ERROR]: errorReducer,
-  [c.UPDATE_TOUR_STARTING_POINT_SUCCESS]: emptySuccessReducer,
-  [c.UPDATE_FLOOR_IMAGE_SUCCESS_REQUEST]: successReducer,
-  [c.UPDATE_FLOOR_IMAGE_ERROR]: errorReducer,
-  [c.MANAGE_SPHERES_REQUEST]: requestReducer,
-  [c.MANAGE_SPHERES_ERROR]: errorReducer,
-  [c.MANAGE_SPHERES_SUCCESS]: (state, payload: Tour) => {
+const reducers_actions: Reducers<State> = {
+  [TOUR_CONSTANTS.GET_MY_TOURS_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.GET_MY_TOURS_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.GET_MY_TOURS_SUCCESS]: successReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_COVER_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_COVER_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_COVER_SUCCESS]: emptySuccessReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_STARTING_POINT_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_STARTING_POINT_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_STARTING_POINT_SUCCESS]: emptySuccessReducer,
+  [TOUR_CONSTANTS.UPDATE_FLOOR_IMAGE_SUCCESS_REQUEST]: successReducer,
+  [TOUR_CONSTANTS.UPDATE_FLOOR_IMAGE_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.MANAGE_SPHERES_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.MANAGE_SPHERES_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.MANAGE_SPHERES_SUCCESS]: (state, payload: Tour) => {
     return {
       ...state,
       isLoading: false,
@@ -40,9 +43,9 @@ const reducers: Reducers<State> = {
       currentTour: payload,
     };
   },
-  [c.ADD_HOTSPOT_REQUEST]: requestReducer,
-  [c.ADD_HOTSPOT_ERROR]: errorReducer,
-  [c.ADD_HOTSPOT_SUCCESS]: (state, payload: Hotspot) => {
+  [TOUR_CONSTANTS.ADD_HOTSPOT_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.ADD_HOTSPOT_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.ADD_HOTSPOT_SUCCESS]: (state, payload: Hotspot) => {
     const [sphereId] = payload.id.split("_");
 
     const spheres = (state.currentTour as Tour).spheres;
@@ -80,7 +83,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.UPDATE_HOTSPOT_SUCCESS]: (state, payload: Hotspot) => {
+  [TOUR_CONSTANTS.UPDATE_HOTSPOT_SUCCESS]: (state, payload: Hotspot) => {
     const [sphereId] = payload.id.split("_");
 
     const spheres = (state.currentTour as Tour).spheres;
@@ -140,7 +143,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.DELETE_HOTSPOT_SUCCESS]: (
+  [TOUR_CONSTANTS.DELETE_HOTSPOT_SUCCESS]: (
     state,
     hotspotId: string | { sphereId: string; hotspotId: string }
   ) => {
@@ -182,9 +185,9 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.ADD_FLOOR_IMAGE_REQUEST]: requestReducer,
-  [c.ADD_FLOOR_IMAGE_ERROR]: errorReducer,
-  [c.ADD_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.ADD_FLOOR_IMAGE_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.ADD_FLOOR_IMAGE_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.ADD_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
     return {
       ...state,
       isLoading: false,
@@ -197,9 +200,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.DELETE_FLOOR_IMAGE_REQUEST]: requestReducer,
-  [c.DELETE_FLOOR_IMAGE_ERROR]: errorReducer,
-  [c.DELETE_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.DELETE_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
     return {
       ...state,
       isLoading: false,
@@ -210,9 +211,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.UPDATE_FLOOR_IMAGE_REQUEST]: requestReducer,
-  [c.UPDATE_FLOOR_IMAGE_ERROR]: errorReducer,
-  [c.UPDATE_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.UPDATE_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
     return {
       ...state,
       isLoading: false,
@@ -223,9 +222,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.ADD_FLOOR_LEVEL_LINK_REQUEST]: requestReducer,
-  [c.ADD_FLOOR_LEVEL_LINK_ERROR]: errorReducer,
-  [c.ADD_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.ADD_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
     const [levelId] = payload.id.split("_");
     const levels = (state.currentTour as Tour).tourFloorPlan.levels;
     const levelInd = levels.findIndex(({ id }) => id === levelId);
@@ -245,9 +242,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.UPDATE_FLOOR_LEVEL_LINK_REQUEST]: requestReducer,
-  [c.UPDATE_FLOOR_LEVEL_LINK_ERROR]: errorReducer,
-  [c.UPDATE_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.UPDATE_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
     return {
       ...state,
       isLoading: false,
@@ -258,9 +253,7 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.DELETE_FLOOR_LEVEL_LINK_REQUEST]: requestReducer,
-  [c.DELETE_FLOOR_LEVEL_LINK_ERROR]: errorReducer,
-  [c.DELETE_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.DELETE_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
     return {
       ...state,
       isLoading: false,
@@ -273,9 +266,9 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.CREATE_TOUR_REQUEST]: requestReducer,
-  [c.CREATE_TOUR_ERROR]: errorReducer,
-  [c.CREATE_TOUR_SUCCESS]: (state, payload: Tour) => {
+  [TOUR_CONSTANTS.CREATE_TOUR_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.CREATE_TOUR_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.CREATE_TOUR_SUCCESS]: (state, payload: Tour) => {
     return {
       ...state,
       isLoading: false,
@@ -287,9 +280,9 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.UPDATE_TOUR_REQUEST]: requestReducer,
-  [c.UPDATE_TOUR_ERROR]: errorReducer,
-  [c.UPDATE_TOUR_SUCCESS]: (state, payload: Tour) => {
+  [TOUR_CONSTANTS.UPDATE_TOUR_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.UPDATE_TOUR_SUCCESS]: (state, payload: Tour) => {
     const pageCopy = [...state.data.page];
     const tourInd = pageCopy.findIndex(({ id }) => id === payload.id);
     pageCopy.splice(tourInd, 1, payload);
@@ -305,9 +298,9 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.DELETE_TOUR_REQUEST]: requestReducer,
-  [c.DELETE_TOUR_ERROR]: errorReducer,
-  [c.DELETE_TOUR_SUCCESS]: (state, payload: Tour) => {
+  [TOUR_CONSTANTS.DELETE_TOUR_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.DELETE_TOUR_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.DELETE_TOUR_SUCCESS]: (state, payload: Tour) => {
     return {
       ...state,
       isLoading: false,
@@ -319,9 +312,19 @@ const reducers: Reducers<State> = {
       },
     };
   },
-  [c.GET_TOUR_PREVIEW_REQUEST]: requestReducer,
-  [c.GET_TOUR_PREVIEW_ERROR]: errorReducer,
-  [c.GET_TOUR_PREVIEW_SUCCESS]: (state, payload: Tour) => {
+  [TOUR_CONSTANTS.GET_TOUR_PREVIEW_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.GET_TOUR_PREVIEW_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.GET_TOUR_PREVIEW_SUCCESS]: (state, payload: Tour) => {
+    return {
+      ...state,
+      isLoading: false,
+      error: null,
+      currentTour: transformFullTourSphereLinks(payload),
+    };
+  },
+  [TOUR_CONSTANTS.GET_FULL_TOUR_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.GET_FULL_TOUR_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.GET_FULL_TOUR_SUCCESS]: (state, payload: Tour) => {
     return {
       ...state,
       isLoading: false,
@@ -329,31 +332,62 @@ const reducers: Reducers<State> = {
       currentTour: payload,
     };
   },
-  [c.GET_FULL_TOUR_REQUEST]: requestReducer,
-  [c.GET_FULL_TOUR_ERROR]: errorReducer,
-  [c.GET_FULL_TOUR_SUCCESS]: (state, payload: Tour) => {
-    return {
-      ...state,
-      isLoading: false,
-      error: null,
-      currentTour: payload,
-    };
-  },
-  [c.SET_CURRENT_TOUR_REQUEST]: requestReducer,
-  [c.SET_CURRENT_TOUR_ERROR]: errorReducer,
-  [c.SET_CURRENT_TOUR_SUCCESS]: (state, payload: Tour) => {
+  [TOUR_CONSTANTS.SET_CURRENT_TOUR_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.SET_CURRENT_TOUR_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.SET_CURRENT_TOUR_SUCCESS]: (state, payload: Tour) => {
     return {
       ...state,
       ...payload,
     };
   },
-  def: (state) => state,
+  [TOUR_CONSTANTS.GET_ICONS_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.GET_ICONS_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.GET_ICONS_SUCCESS]: (state, payload: any) => {
+    return {
+      ...state,
+      icons: [...payload],
+    };
+  },
+  [TOUR_CONSTANTS.DELETE_ICONS_SUCCESS]: (state, payload: Icon) => {
+    return {
+      ...state,
+      icons: [
+        ...state.icons.filter((icon) => {
+          return icon.id !== payload.id;
+        }),
+      ],
+    };
+  },
+  def: (state) => {
+    return state;
+  },
 };
 
 const toursReducer = (state = initialState, action: AnyAction): State => {
-  const relevantReducer = reducers[action.type] || reducers.def;
+  if (action.type === HYDRATE) {
+    return {
+      ...state,
+      ...action.payload,
+    };
+  }
+
+  const relevantReducer = reducers_actions[action.type] || reducers_actions.def;
 
   return relevantReducer(state, action.payload) as State;
 };
 
 export default toursReducer;
+
+// export default createSlice({
+//   name: "toursReducer",
+//   initialState,
+//   reducers: {
+//     toursReducer,
+//   },
+//   extraReducers: {
+//     [HYDRATE]: (state, action) => ({
+//       ...state,
+//       ...action.payload.auth,
+//     }),
+//   },
+// });

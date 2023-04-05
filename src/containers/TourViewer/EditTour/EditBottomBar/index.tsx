@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
 import { Add, ChevronLeft, ChevronRight } from "wix-ui-icons-common";
@@ -50,6 +50,7 @@ const EditBottomBar: FC = () => {
   const [animation, setAnimation] = useState(true);
   const [localSpheres, setLocalSpheres] = useState<Array<Image360>>([]);
   const [selectedCurrentTour, setSelectedCurrentTour] = useState<any>(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   const duration = {
     appear: 100,
@@ -141,11 +142,12 @@ const EditBottomBar: FC = () => {
 
   return (
     <>
-      <Transition appear in={animation} timeout={duration}>
+      <Transition appear in={animation} timeout={duration} nodeRef={nodeRef}>
         {(state) => (
           <EditBottomBarWrapper
             onDrop={(e) => e.stopPropagation()}
             state={state}
+            ref={nodeRef}
           >
             <AddImage onClick={openAddImageSidebar}>
               <Add height={45} width={45} color="white" />

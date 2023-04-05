@@ -8,15 +8,13 @@ import { ErrorText, GlobalStyle, LoaderWrapper } from "./styles";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "../../store/index";
-
 React.useLayoutEffect = React.useEffect;
 
 type Source = "wix" | "viarLive";
-
 interface Props {
   tourId: string;
   source: Source;
-  isWidget?: any;
+  isWidget?: boolean;
 }
 
 const Krpano = ({ tourId, source, isWidget }: Props) => {

@@ -2,8 +2,8 @@ import c, { TOUR_MODES } from "./constants";
 import type { State } from "./types";
 import type { Reducers } from "../types";
 import type { AnyAction } from "redux";
-import { createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
+// import { createSlice } from "@reduxjs/toolkit";
+// import { HYDRATE } from "next-redux-wrapper";
 
 const initialState: State = {
   imageId: null,

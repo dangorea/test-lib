@@ -11,7 +11,7 @@ export const ViewerContainer = styled.div<Props>`
   position: ${({ isSideViewer }) => (isSideViewer ? "static" : "absolute")};
   top: 0;
   left: 0;
-  z-index: 500;
+  //z-index: 500;
   ${({ showBorder, borderWidth, borderColor }: Partial<WidgetSettings>) =>
     showBorder &&
     `border: ${borderWidth || "0"}px solid ${

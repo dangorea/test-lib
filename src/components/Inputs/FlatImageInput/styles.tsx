@@ -3,8 +3,8 @@ import { Drawer } from "../../../containers/MyImages/Actionbar/UploadDrawer/styl
 // import { Heading } from "wix-style-react";
 
 export const FormFieldWrapper = styled.div`
-  //margin-top: 10px;
-  //margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 `;
 
 export const SphereSelectDrawer = styled(Drawer)`
@@ -27,20 +27,29 @@ export const PreviewItemWrapper = styled.div`
   flex-direction: column;
 `;
 
-// TODO maybe fix here
-export const DrawerTitle = styled("title")`
+export const DrawerTitle = styled.div`
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 36px;
+  color: #162d3d;
   text-align: center;
   margin-bottom: 20px;
 `;
 
 export const SphereSelectActions = styled.div`
   display: flex;
-  gap: 5%;
+  justify-content: flex-end;
+  align-items: flex-end;
+  height: 100%;
+
+  & > button {
+    margin-right: 10px;
+  }
 `;
 
 export const SecondViewerContainer = styled.div`
   width: 100%;
-  height: 25%;
+  height: 30vh;
   user-select: none;
 
   img {

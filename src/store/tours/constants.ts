@@ -13,7 +13,7 @@ const TOUR_CONSTANTS = {
   ...createRequestTypes("ADD_HOTSPOT"),
   ...createRequestTypes("UPDATE_HOTSPOT"),
   ...createRequestTypes("DELETE_HOTSPOT"),
-  ...createRequestTypes("ADD_FLOOR_IMAGE"),
+  ...createRequestTypes("UPLOAD_FLOOR_IMAGE"),
   ...createRequestTypes("UPDATE_FLOOR_IMAGE"),
   ...createRequestTypes("DELETE_FLOOR_IMAGE"),
   ...createRequestTypes("ADD_FLOOR_LEVEL_LINK"),

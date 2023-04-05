@@ -6,7 +6,7 @@ export const SidebarWrapper = styled.div<{ open: boolean }>`
   opacity: ${({ open }) => (open ? 1 : 0)};
   width: 540px;
   max-width: 100%;
-  height: 100vh;
+  height: 100%;
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -53,8 +53,8 @@ export const CloseBtn = styled.div`
     height: 20px;
   }
 `;
-// TODO maybe fix here
-export const SidebarTitle = styled("title")`
+
+export const SidebarTitle = styled.title`
   font-family: "Lato", sans-serif;
   display: flex;
   font-style: normal;
@@ -106,7 +106,7 @@ export const CancelBtn = styled.button`
   transition-property: background-color, color, border-color;
   height: 36px;
   min-width: 84px;
-  border-radius: var(--wsr-button-border-radius, 18px);
+  border-radius: 18px;
   padding: 0 23px;
   text-decoration: none;
   user-select: none;

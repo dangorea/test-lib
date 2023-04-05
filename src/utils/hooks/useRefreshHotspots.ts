@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { getViewerImageId } from "../../store/viewer/selectors";
-import { getCurrentTour, getHotspots } from "../../store/tours/selectors";
+import { getCurrentTour } from "../../store/tours/selectors";
 import type { Image360, Tour } from "../../store/types";
 import { useAddHotspot } from "./useAddHotspot";
 import { useCallback, useMemo } from "react";

@@ -11,7 +11,7 @@ import type { Hotspot, State } from "./types";
 import { HOTSPOT_TYPES } from "./types";
 import { transformFullTourSphereLinks } from "../../utils/tour";
 import { HYDRATE } from "next-redux-wrapper";
-import { Icon, Link } from "../types";
+import type { Icon } from "../types";
 
 const initialState: State = {
   data: {},
@@ -19,6 +19,7 @@ const initialState: State = {
   error: null,
   currentTour: null,
   icons: [],
+  products: [],
 };
 
 const reducers_actions: Reducers<State> = {
@@ -185,9 +186,9 @@ const reducers_actions: Reducers<State> = {
       },
     };
   },
-  [TOUR_CONSTANTS.ADD_FLOOR_IMAGE_REQUEST]: requestReducer,
-  [TOUR_CONSTANTS.ADD_FLOOR_IMAGE_ERROR]: errorReducer,
-  [TOUR_CONSTANTS.ADD_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
+  [TOUR_CONSTANTS.UPLOAD_FLOOR_IMAGE_REQUEST]: requestReducer,
+  [TOUR_CONSTANTS.UPLOAD_FLOOR_IMAGE_ERROR]: errorReducer,
+  [TOUR_CONSTANTS.UPLOAD_FLOOR_IMAGE_SUCCESS]: (state, payload: any) => {
     return {
       ...state,
       isLoading: false,

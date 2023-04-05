@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import ActionsSidebar from "../ActionsSidebar";
 import DraggableActionBtn from "../DraggableActionBtn";
-// import { Heading, Tooltip } from "wix-style-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getKrpanoInterface,
@@ -9,7 +8,7 @@ import {
 } from "../../../../../store/viewer/selectors";
 import { Krpano, KrpanoPos, VIEWER_CONFIG } from "../../../../../utils/config";
 import { createPortal } from "react-dom";
-import { Form, Formik } from "formik";
+import { Formik } from "formik";
 import { initialValues, validationSchema, Values } from "./form";
 import FormField from "../../../../../components/Inputs/FormField";
 import { TMP_HOTSPOT, TMP_HOTSPOT_NAME } from "../constants";
@@ -27,7 +26,6 @@ import { getCurrentTour } from "../../../../../store/tours/selectors";
 import type { Tour } from "../../../../../store/types";
 import UpdateHotspotVals from "../UpdateHotspotVals";
 import { useRefreshHotspots } from "../../../../../utils/hooks/useRefreshHotspots";
-// import { sanitize } from "dompurify";
 import FlatImageInput from "../../../../../components/Inputs/FlatImageInput";
 import FlatImageIcon from "../FlatImageIcon";
 import HotspotSizeSlider from "../../../../../components/Inputs/HotspotSizeSlider";
@@ -189,7 +187,6 @@ const AddFlatImage: FC<Props> = ({ open, handleOpen, handleClose }) => {
                   currentHotspot.id !== TMP_HOTSPOT_NAME ? onDelete : undefined
                 }
                 title={
-                  // TODO fix here
                   <Tooltip
                     title="Add an Flat Image to any point on your tour to share a story or tell people more."
                     position="right"
@@ -199,31 +196,29 @@ const AddFlatImage: FC<Props> = ({ open, handleOpen, handleClose }) => {
                   </Tooltip>
                 }
               >
-                <Form>
-                  <UpdateHotspotVals vals={currentHotspot} />
-                  <ChangeIcon hotspotType={String(HOTSPOT_TYPES.FLAT)} />
-                  <FormField
-                    label="Choose a title"
-                    name="title"
-                    placeholder="Add your title here"
-                    required
-                  />
-                  <FlatImageInput
-                    label="Choose an image"
-                    name="target"
-                    height="height"
-                    width="width"
-                    required
-                  />
-                  <HotspotSizeSlider label="Image size" name="size" />
-                  <RichTextInput
-                    label="Content"
-                    name="content"
-                    // placeholder="Describe your flatspot here"
-                    setValueCondition={currentHotspot.id !== values.id}
-                    newValue={currentHotspot.content}
-                  />
-                </Form>
+                <UpdateHotspotVals vals={currentHotspot} />
+                <ChangeIcon hotspotType={String(HOTSPOT_TYPES.FLAT)} />
+                <FormField
+                  label="Choose a title"
+                  name="title"
+                  placeholder="Add your title here"
+                  required
+                />
+                <FlatImageInput
+                  label="Choose an image"
+                  name="target"
+                  height="height"
+                  width="width"
+                  required
+                />
+                <HotspotSizeSlider label="Image size" name="size" />
+                <RichTextInput
+                  label="Content"
+                  name="content"
+                  placeholder="Describe your flatspot here"
+                  setValueCondition={currentHotspot.id !== values.id}
+                  newValue={currentHotspot.content}
+                />
               </ActionsSidebar>
             );
           }}

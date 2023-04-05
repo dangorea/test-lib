@@ -7,13 +7,14 @@ import { getViewerImageId } from "../../store/viewer/selectors";
 import { setSource } from "../../store/test/reducer";
 import { getIcons } from "../../store/tours/actions";
 React.useLayoutEffect = React.useEffect;
+
 type Props = {
   tourId: string;
   source: string;
   isWidget?: boolean;
 };
 
-function KrpanoWrapper({ tourId, source, isWidget = false }: Props) {
+const KrpanoWrapper = ({ tourId, source, isWidget = false }: Props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -39,6 +40,6 @@ function KrpanoWrapper({ tourId, source, isWidget = false }: Props) {
       </Viewer>
     </>
   );
-}
+};
 
 export default KrpanoWrapper;

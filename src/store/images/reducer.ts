@@ -1,8 +1,6 @@
 import c from "./constants";
 import type { AnyAction } from "redux";
 import { emptySuccessReducer, errorReducer, requestReducer } from "../utils";
-import { createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
 
 const initialState: any = {
   data: {},
@@ -41,6 +39,9 @@ const reducers: any = {
       error: null,
     };
   },
+  [c.UPLOAD_IMAGE_REQUEST]: requestReducer,
+  [c.UPLOAD_IMAGE_ERROR]: errorReducer,
+  [c.UPLOAD_IMAGE_SUCCESS]: emptySuccessReducer,
   [c.SET_UPLOAD_PROGRESS]: (state: any, payload: any) => {
     return {
       ...state,

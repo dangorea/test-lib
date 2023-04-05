@@ -1,6 +1,7 @@
 import type {
   Image360,
   Level,
+  Link,
   PaginationMetadata,
   RootState,
   Tour,
@@ -76,13 +77,24 @@ export const getHotspots =
 
 export const getAllSpheres =
   () =>
-  (state: RootState): Array<Image360> | undefined =>
+  (state: RootState): Image360[] | undefined =>
     state.tours.currentTour?.spheres;
 
 export const getLevels =
   () =>
   (state: RootState): Level[] | [] =>
     state.tours.currentTour?.tourFloorPlan.levels || [];
+
+export const getLinkFromLevel =
+  (id: string) =>
+  ({ tours }: RootState): Link[] | undefined =>
+    tours.currentTour?.tourFloorPlan.levels.find((level) => level.id === id)
+      ?.links;
+
+export const getShowHotspotTitle =
+  () =>
+  ({ tours }: RootState): boolean | undefined =>
+    tours.currentTour?.tourFloorPlan.showHotspotTitles;
 
 export const getIcons =
   () =>
@@ -91,5 +103,5 @@ export const getIcons =
 
 export const getCurrentTourId =
   () =>
-  (state: RootState): string | undefined =>
-    state.tours.currentTour?.id;
+  ({ tours }: RootState): string | undefined =>
+    tours.currentTour?.id;

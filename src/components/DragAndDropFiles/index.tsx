@@ -23,7 +23,7 @@ const DragAndDrop = ({ uploadFiles }: Props) => {
       <input {...getInputProps()} />
       <span>Drag & Drop Images</span>
       <span>or</span>
-      <UploadFile>Upload a File</UploadFile>
+      <UploadFile onClick={(e) => e.preventDefault()}>Upload a File</UploadFile>
     </Dropzone>
   );
 };

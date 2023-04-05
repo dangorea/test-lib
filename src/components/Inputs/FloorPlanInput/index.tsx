@@ -1,283 +1,67 @@
-import {
-  ImageInput,
-  ImageTitleLabel,
-  InputContainer,
-  InputWrapper,
-} from "./styles";
-import React, { FC, useCallback, useEffect, useState } from "react";
-// import { FileUpload, Loader } from "wix-style-react";
-import {
-  BottomBtnsWrapper,
-  SaveBtn,
-  UploadBtn,
-} from "../../../containers/TourViewer/EditTour/EditActions/AddFloorPlan/styles";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  addFloorPlanDotsToLink,
-  addFloorPlanLevel,
-  updateFloorPlanLevel,
-} from "../../../store/tours/actions";
-import { getTourId } from "../../../store/viewer/selectors";
-import { errorNotification } from "../../../store/notifications/actions";
-import downloadIcon from "../../../assets/icons/downloadIcon.svg";
-import saveIcon from "../../../assets/icons/saveIcon.svg";
-import ImageContainer from "../../../containers/TourViewer/EditTour/EditActions/AddFloorPlan/ActionModal/ImageContainer";
-import ImageIcon from "../../../assets/icons/img-icon.svg";
-import type { Level, Link } from "../../../store/types";
-import ImageCarousel from "./components";
-import { CONFIG } from "../../../utils/config";
-import CheckboxButton from "../../../containers/TourViewer/EditTour/EditActions/AddFloorPlan/components/CheckboxBtn";
+import React, { ChangeEvent, FC, useEffect, useRef } from "react";
+import { useField } from "formik";
+import { FileInput, UploadBtn, SaveBtn, BtnsWrapper } from "./styles";
+import DownloadIcon from "../../../assets/icons/downloadIcon";
+import { useSelector } from "react-redux";
 import { getLevels } from "../../../store/tours/selectors";
-import { v4 as uuid } from "uuid";
+import ImageCarousel from "../../../components/ImageCarousel";
+import saveIcon from "../../../assets/icons/saveIcon.svg";
 
 type Props = {
-  open: boolean;
-  uploadedImage: FileList | Level[] | null;
-  setUploadedImage: React.Dispatch<
-    React.SetStateAction<FileList | Level[] | null>
-  >;
+  name: string;
+  handleChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: /*(title: string, imageId: string) => void;*/ () => void;
 };
 
-const FloorPlanInput: FC<Props> = ({
-  open,
-  uploadedImage,
-  setUploadedImage,
-}) => {
-  const tourId = useSelector(getTourId()) as string;
-  const [selectedImage, setSelectedImage] = useState<File | Level | null>(null);
-  const [toggle, setToggle] = useState<boolean>(false);
-  const [savedPosition, setSavedPosition] = useState<Link[]>([]);
-  const [uploadAction, setUploadAction] = useState<boolean>(false);
-  const [titleInput, setTitleInput] = useState<{
-    title: string;
-    edited: boolean;
-  }>();
+const FloorPlanInput: FC<Props> = ({ name, handleChange, handleSubmit }) => {
+  const [field, _meta, helpers] = useField(name);
+  const [_titleField, _titleMeta, titleHelpers] = useField("title");
+  const hiddenFileInput = useRef<HTMLInputElement>(null);
+  const level = useSelector(getLevels());
 
-  const levels = useSelector(getLevels());
-  const dispatch = useDispatch();
-
-  const uploadFiles = useCallback(
-    async (files: FileList, title: string) => {
-      await Promise.all(
-        Array.from(files).map(async (file) => {
-          if ("url" in file) {
-            return;
-          }
-
-          const isImage =
-            file.type === "image/png" ||
-            file.type === "image/jpeg" ||
-            file.type === "image/jpg";
-
-          if (!isImage) {
-            dispatch(errorNotification("File type should be JPG, PNG"));
-            return;
-          }
-
-          if (!title) {
-            dispatch(errorNotification("Image title required"));
-            return;
-          }
-          setUploadAction(true);
-          await dispatch(
-            addFloorPlanLevel(
-              tourId,
-              file,
-              title,
-              setUploadedImage,
-              setUploadAction
-            )
-          );
-        })
-      );
-    },
-    [dispatch]
-  );
-
-  const saveDots = useCallback(
-    async (data: Array<Link>, selected: Level) => {
-      for (const dot of Array.from(data)) {
-        if (!selected.hasOwnProperty("id")) {
-          dispatch(errorNotification("Save image first"));
-          return;
-        }
-
-        if (!dot.toUpload) {
-          continue;
-        }
-
-        setUploadAction(true);
-
-        await dispatch(
-          addFloorPlanDotsToLink(tourId, selected, dot, setUploadAction)
-        );
-      }
-    },
-    [dispatch]
-  );
-
-  const modifyTitle = (
-    newTitle: { title: string; edited: boolean },
-    selectedImageId: string
-  ) => {
-    if (newTitle.edited) {
-      setUploadAction(true);
-      dispatch(
-        updateFloorPlanLevel(
-          tourId,
-          selectedImageId,
-          newTitle.title,
-          setUploadAction
-        )
-      );
+  const handleClick = () => {
+    if (hiddenFileInput.current) {
+      hiddenFileInput.current.click();
     }
   };
 
   useEffect(() => {
-    if (!!uploadedImage?.length && !uploadAction) {
-      setSelectedImage(uploadedImage[0]);
-    } else if (!!uploadedImage?.length && uploadAction) {
-      setSelectedImage(uploadedImage[uploadedImage.length - 1]);
-      setUploadAction(false);
-    } else {
-      setSelectedImage(null);
-      setSavedPosition([]);
-      setTitleInput({ title: "", edited: false });
-    }
-  }, [dispatch, uploadedImage, open]);
-
-  useEffect(() => {
-    levels &&
-      CONFIG.client !== "viarLive" &&
-      setUploadedImage(
-        levels?.map((level) => ({
-          ...level,
-          url: `${CONFIG.storageUrl}/media/${level.id}/${level.name}`,
-        }))
-      );
-  }, [open, levels]);
-
-  useEffect(() => {
-    const selected: Level = selectedImage as Level;
-    const fetchedData = uploadedImage as Array<Level>;
-    if (fetchedData) {
-      for (const data of Array.from(fetchedData)) {
-        if (data.id === selected?.id) {
-          if (data?.title) {
-            setTitleInput({ title: data?.title, edited: false });
-          } else {
-            setTitleInput({ title: "", edited: false });
-          }
-          if (data.links?.length) {
-            setSavedPosition(data?.links);
-          } else {
-            setSavedPosition([]);
-          }
-        }
-      }
-    } else {
-      setTitleInput({ title: "", edited: false });
-      setSavedPosition([]);
-    }
-  }, [selectedImage]);
-
-  if (!open) {
-    return null;
-  }
+    titleHelpers.setValue(field.value?.title || field.value?.name);
+  }, [field.value]);
 
   return (
     <>
-      {/*<ImageContainer*/}
-      {/*  key={uuid().slice(0, 8)}*/}
-      {/*  selectedImage={selectedImage}*/}
-      {/*  savedPosition={savedPosition}*/}
-      {/*  setSavedPosition={setSavedPosition}*/}
-      {/*  toggle={toggle}*/}
-      {/*/>*/}
-      <InputContainer>
-        <InputWrapper>
-          <ImageTitleLabel>Add image title</ImageTitleLabel>
-          <ImageInput
-            image={ImageIcon}
-            value={titleInput?.title}
-            onChange={(e) =>
-              setTitleInput({ title: e.target.value, edited: true })
-            }
-            type="text"
-            required
-            placeholder={"ex. Ground floor plan"}
+      <ImageCarousel
+        selectedImage={field.value}
+        setSelectedImage={helpers.setValue}
+        setLabel={titleHelpers.setValue}
+      />
+      <BtnsWrapper>
+        <UploadBtn type="button" onClick={handleClick}>
+          <DownloadIcon />
+          <span>Upload</span>
+          <FileInput
+            ref={hiddenFileInput}
+            type="file"
+            accept=".jpeg,.jpg,.png"
+            onChange={handleChange}
+            multiple={false}
           />
-        </InputWrapper>
-        {!!uploadedImage?.length && (
-          <>
-            <div>
-              <CheckboxButton
-                id="toggle"
-                onChange={() => setToggle(!toggle)}
-                label="Show hotspot titles"
-                checked={toggle}
-              />
-              <ImageCarousel
-                key={uuid().slice(0, 8)}
-                image={uploadedImage}
-                setImage={setUploadedImage}
-                selectedImage={selectedImage}
-                setSelectedImage={setSelectedImage}
-                savedPosition={savedPosition}
-                setSavedPosition={setSavedPosition}
-              />
-            </div>
-          </>
-        )}
-        <BottomBtnsWrapper>
-          {/*TODO fix here*/}
-          {/*<FileUpload*/}
-          {/*  onChange={(e) => (*/}
-          {/*    !!uploadedImage?.length*/}
-          {/*      ? setUploadedImage?.([...uploadedImage, ...e])*/}
-          {/*      : setUploadedImage?.(e),*/}
-          {/*    setUploadAction(true)*/}
-          {/*  )}*/}
-          {/*  accept=".jpeg,.jpg,.png"*/}
-          {/*>*/}
-          {/*  {({ openFileUploadDialog }) => (*/}
-          {/*    <UploadBtn onClick={openFileUploadDialog}>*/}
-          {/*      <img src={downloadIcon} alt="error"></img>*/}
-          {/*      <span>Upload</span>*/}
-          {/*    </UploadBtn>*/}
-          {/*  )}*/}
-          {/*</FileUpload>*/}
-          {!!uploadedImage?.length && (
-            <SaveBtn
-              onClick={() => {
-                if (titleInput?.title != null && !!uploadedImage?.length) {
-                  uploadFiles(uploadedImage as FileList, titleInput?.title);
-                }
-                if (
-                  titleInput?.edited &&
-                  selectedImage &&
-                  "id" in selectedImage
-                ) {
-                  modifyTitle(titleInput, selectedImage?.id);
-                }
-                if (selectedImage?.hasOwnProperty("id")) {
-                  saveDots(savedPosition, selectedImage as Level);
-                }
-              }}
-            >
-              {uploadAction ? (
-                // <Loader size="small" />
-                <>Loading</>
-              ) : (
-                <>
-                  <img src={saveIcon} alt="" />
-                  <span>Save</span>
-                </>
-              )}
-            </SaveBtn>
-          )}
-        </BottomBtnsWrapper>
-      </InputContainer>
+        </UploadBtn>
+        {level.length ? (
+          <SaveBtn type="button" onClick={handleSubmit}>
+            {/*{uploadAction ? (*/}
+            {/*  // <Loader size="small" />*/}
+            {/*  <>Loading</>*/}
+            {/*// ) : (*/}
+            {/*//   <>*/}
+            <img src={saveIcon} alt="" />
+            <span>Save</span>
+            {/*  // </>*/}
+            {/*// )}*/}
+          </SaveBtn>
+        ) : null}
+      </BtnsWrapper>
     </>
   );
 };

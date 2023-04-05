@@ -12,8 +12,6 @@ import {
   DeleteBtn,
   LoaderWrapper,
   Select,
-  Input,
-  Indicator,
   ProgressBarWrapper,
 } from "../../../../../../MyImages/ImageGrid/ImageItem/styles";
 import { useDispatch, useSelector } from "react-redux";

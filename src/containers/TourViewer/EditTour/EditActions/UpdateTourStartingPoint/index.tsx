@@ -15,6 +15,9 @@ import type { Krpano } from "../../../../../utils/config";
 import TourStartingPointIcon from "../TourStartingPointIcon";
 
 import { SvgIconHover } from "./styles";
+import { ActionBtn } from "../UpdateCover/styles";
+import Tooltip from "../../../../../components/Tooltip";
+import CoverIcon from "../CoverIcon";
 
 const UpdateTourStartingPoint: FC = () => {
   const krpano = useSelector(getKrpanoInterface()) as Krpano;
@@ -48,16 +51,18 @@ const UpdateTourStartingPoint: FC = () => {
 
   return (
     <SvgIconHover>
-      {/*  TODO fix here*/}
-      {/*<IconButton skin="inverted" onClick={updateStartingPoint}>*/}
-      {/*  <Tooltip*/}
-      {/*    content="Set this view as your tour's starting point."*/}
-      {/*    placement="bottom"*/}
-      {/*    size="small"*/}
-      {/*  >*/}
-      {/*    <TourStartingPointIcon />*/}
-      {/*  </Tooltip>*/}
-      {/*</IconButton>*/}
+      <ActionBtn onClick={updateStartingPoint}>
+        <Tooltip
+          title="Set this view as your tour's starting point."
+          position="right"
+          styles={{
+            top: "-10px",
+            left: "35px",
+          }}
+        >
+          <TourStartingPointIcon />
+        </Tooltip>
+      </ActionBtn>
     </SvgIconHover>
   );
 };

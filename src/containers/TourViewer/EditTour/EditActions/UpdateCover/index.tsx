@@ -1,7 +1,6 @@
-import React, { FC, useCallback } from "react";
+import React, { FC, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { IconButton, PopoverMenu, Tooltip } from "wix-style-react";
-
+import { Popover } from "react-tiny-popover";
 import {
   getKrpanoInterface,
   getTourId,
@@ -9,18 +8,28 @@ import {
 } from "../../../../../store/viewer/selectors";
 import { updateTourCover } from "../../../../../store/tours/actions";
 import { setStartingPoint } from "../../../../../store/images/actions";
-
-import type { Krpano } from "../../../../../utils/config";
-
 import CoverIcon from "../CoverIcon";
+import type { Krpano } from "../../../../../utils/config";
+import Tooltip from "../../../../../components/Tooltip";
+import {
+  ActionBtn,
+  PopoverBtn,
+  SvgIconHover,
+  UpdateCoverWrapper,
+} from "./styles";
 
-import { SvgIconHover } from "./styles";
+type Props = {
+  open: boolean;
+  handleOpen: () => void;
+  handleClose: () => void;
+};
 
-const UpdateCover: FC = () => {
+const UpdateCover: FC<Props> = ({ open, handleOpen, handleClose }) => {
+  // const [showModal, setShowModal] = useState<boolean>(false);
   const krpano = useSelector(getKrpanoInterface()) as Krpano;
   const sphereId = useSelector(getViewerImageId()) as string;
   const tourId = useSelector(getTourId()) as string;
-
+  const PopoverRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
   const updateThumb = useCallback(() => {
@@ -32,6 +41,7 @@ const UpdateCover: FC = () => {
         atv: krpano.get("view.vlookat"),
       })
     );
+    handleClose();
   }, [dispatch, krpano, sphereId]);
 
   const updateCover = useCallback(() => {
@@ -43,37 +53,43 @@ const UpdateCover: FC = () => {
         atv: +krpano.get("view.vlookat"),
       })
     );
+    handleClose();
   }, [dispatch, krpano, sphereId, tourId]);
 
   return (
-    //   TODO Fix here
-    // <PopoverMenu
-    //   triggerElement={
-    //     <SvgIconHover>
-    //       <IconButton skin="inverted">
-    //         <Tooltip
-    //           content="Click to set your tour's thumbnail and cover image"
-    //           placement="right"
-    //           size="small"
-    //         >
-    //           <CoverIcon />
-    //         </Tooltip>
-    //       </IconButton>
-    //     </SvgIconHover>
-    //   }
-    //   placement="right"
-    //   textSize="small"
-    // >
-    //   <PopoverMenu.MenuItem
-    //     text="Set this view as your image’s thumbnail."
-    //     onClick={updateThumb}
-    //   />
-    //   <PopoverMenu.MenuItem
-    //     text="Set this view as your tour’s cover image."
-    //     onClick={updateCover}
-    //   />
-    // </PopoverMenu>'
-    <></>
+    <Popover
+      isOpen={open}
+      onClickOutside={handleClose}
+      positions={["right"]}
+      content={
+        <UpdateCoverWrapper ref={PopoverRef} open={open}>
+          <PopoverBtn onClick={updateThumb}>
+            Set this view as your image's thumbnail.
+          </PopoverBtn>
+          <PopoverBtn onClick={updateCover}>
+            Set this view as your tour's cover image.
+          </PopoverBtn>
+        </UpdateCoverWrapper>
+      }
+      containerStyle={{
+        left: "5px",
+      }}
+    >
+      <SvgIconHover>
+        <ActionBtn onClick={handleOpen}>
+          <Tooltip
+            title="Click to set your tour's thumbnail and cover image"
+            position="right"
+            styles={{
+              top: "-20px",
+              left: "35px",
+            }}
+          >
+            <CoverIcon />
+          </Tooltip>
+        </ActionBtn>
+      </SvgIconHover>
+    </Popover>
   );
 };
 

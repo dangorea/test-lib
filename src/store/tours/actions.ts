@@ -573,24 +573,26 @@ export const deleteLinkToProductHotspot =
     }
   };
 
-export const addFloorPlanLevel =
+export const uploadFloorPlanLevel =
   (
     tourId: string,
     file: File,
-    title: string,
-    setUploadedImage?: (
-      value:
-        | ((
-            prevState: FileList | Array<Level> | null
-          ) => FileList | Array<Level> | null)
-        | FileList
-        | Array<Level>
-        | null
-    ) => void,
-    onComplete?: React.Dispatch<React.SetStateAction<boolean>>
+    title: string
+    // setUploadedImage?: (
+    //   value:
+    //     | ((
+    //         prevState: FileList | Array<Level> | null
+    //       ) => FileList | Array<Level> | null)
+    //     | FileList
+    //     | Array<Level>
+    //     | null
+    // ) => void,
+    // onComplete?: React.Dispatch<React.SetStateAction<boolean>>
   ) =>
-  async (dispatch: Dispatch): Promise<void> => {
+  async (dispatch: Dispatch, getState: () => RootState): Promise<void> => {
     try {
+      dispatch({ type: c.UPLOAD_IMAGE_REQUEST });
+
       const { data } = await axios.post<FloorPlan>(
         `${BASE_ENDPOINT}/${tourId}/level`,
         {
@@ -601,41 +603,56 @@ export const addFloorPlanLevel =
 
       const { id } = data;
 
+      EVAPORATE_CONFIG.bucket = `${getState().config.bucket}/media`;
+
       const evaporate = await Evaporate.create(EVAPORATE_CONFIG);
+
+      // const addConfig: Evaporate.AddConfig = {
+      //   name: file.name,
+      //   file: file,
+      //   progress: (value) => value,
+      // };
 
       const addConfig: Evaporate.AddConfig = {
         name: file.name,
         file: file,
-        progress: (value) => value,
+        progress: (value) => {
+          dispatch({
+            type: c.SET_UPLOAD_PROGRESS,
+            payload: { id, progress: value },
+          });
+        },
       };
 
       const overrides = {
-        bucket: `${CONFIG.awsBucket}/media/${id}`,
+        bucket: `${EVAPORATE_CONFIG.bucket}/${id}`,
       };
 
       await evaporate.add(addConfig, overrides);
 
-      const interval = setInterval(() => {
-        void axios
-          .get(`${BASE_ENDPOINT}/${tourId}/levels`)
-          .then(({ data: newImageData }) => {
-            if (newImageData) {
-              setUploadedImage?.(
-                newImageData.map((image: Level) => ({
-                  ...image,
-                  url: `${CONFIG.storageUrl}/media/${image.id}/${image.name}`,
-                }))
-              );
-              onComplete?.(false);
-              dispatch(successNotification(`Floor Plan saved`));
-              dispatch({
-                type: TOUR_CONSTANTS.ADD_FLOOR_IMAGE_SUCCESS,
-                payload: newImageData,
-              });
-              clearInterval(interval);
-            }
+      const interval = setInterval(async (): Promise<void> => {
+        try {
+          const { data: newImageData } = await axios.get(
+            `${BASE_ENDPOINT}/${tourId}/levels`
+          );
+
+          if (newImageData.length) {
             clearInterval(interval);
-          });
+            dispatch({
+              type: TOUR_CONSTANTS.UPLOAD_FLOOR_IMAGE_SUCCESS,
+              payload: newImageData,
+            });
+            dispatch({ type: c.UPLOAD_IMAGE_SUCCESS });
+          }
+        } catch (err) {
+          if (err instanceof Error) {
+            clearInterval(interval);
+            dispatch({
+              type: TOUR_CONSTANTS.UPLOAD_IMAGE_ERROR,
+              payload: err.message || err,
+            });
+          }
+        }
       }, 2000);
     } catch (err) {
       if (err instanceof Error) {
@@ -648,8 +665,8 @@ export const updateFloorPlanLevel =
   (
     tourId: string,
     selectedImageId: string,
-    newTitle: string,
-    onComplete?: React.Dispatch<React.SetStateAction<boolean>>
+    newTitle: string
+    // onComplete?: React.Dispatch<React.SetStateAction<boolean>>
   ) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
@@ -659,7 +676,7 @@ export const updateFloorPlanLevel =
         })
         .then(({ data }) => {
           if (data) {
-            onComplete?.(false);
+            // onComplete?.(false);
             dispatch({
               type: TOUR_CONSTANTS.UPDATE_FLOOR_IMAGE_SUCCESS,
               payload: data,
@@ -698,26 +715,24 @@ export const addFloorPlanDotsToLink =
   (
     tourId: string,
     selectedImage: Level,
-    dot: Link,
-    onComplete?: React.Dispatch<React.SetStateAction<boolean>>
+    dot: Link
+    // onComplete?: React.Dispatch<React.SetStateAction<boolean>>
   ) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
-      void (await axios
-        .post<FloorPlan>(
-          `${BASE_ENDPOINT}/${tourId}/level/${selectedImage?.id}/link`,
-          {
-            ...dot,
-          }
-        )
-        .then(({ data }) => {
-          data && onComplete?.(false);
-          dispatch({
-            type: TOUR_CONSTANTS.ADD_FLOOR_LEVEL_LINK_SUCCESS,
-            payload: data,
-          });
-          dispatch(successNotification("Hotspot saved"));
-        }));
+      // console.log({ tourId, selectedImage, dot });
+      const { data } = await axios.post<FloorPlan>(
+        `${BASE_ENDPOINT}/${tourId}/level/${selectedImage?.id}/link`,
+        {
+          ...dot,
+        }
+      );
+
+      dispatch({
+        type: TOUR_CONSTANTS.ADD_FLOOR_LEVEL_LINK_SUCCESS,
+        payload: data,
+      });
+      dispatch(successNotification("Hotspot saved"));
     } catch (err) {
       if (err instanceof Error) {
         dispatch(errorNotification(`${err.message}`));
@@ -761,7 +776,7 @@ export const updateFloorLevelLink =
             type: TOUR_CONSTANTS.UPDATE_FLOOR_LEVEL_LINK_SUCCESS,
             payload: data,
           });
-          dispatch(successNotification("Hotspot updated"));
+          // dispatch(successNotification("Hotspot updated"));
         });
     } catch (err) {
       if (err instanceof Error) {
@@ -808,13 +823,6 @@ export const uploadIcons =
 
       const { id } = data;
 
-      // await requestMyImages(
-      //   metadata?.numberOfPage,
-      //   metadata?.perPage
-      // )(dispatch);
-      //
-      // await updateImage(id, { status: IMAGE_STATUSES.UPLOADING })(dispatch);
-
       EVAPORATE_CONFIG.bucket = `${getState().config.bucket}/media`;
 
       const evaporate = await Evaporate.create(EVAPORATE_CONFIG);
@@ -836,7 +844,6 @@ export const uploadIcons =
 
       await evaporate.add(addConfig, overrides);
 
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       const interval = setInterval(async (): Promise<void> => {
         try {
           const { data: newImageData } = await axios.get(`media/${id}`);
@@ -858,7 +865,10 @@ export const uploadIcons =
             ].includes(newImageData.status)
           ) {
             onComplete?.(false);
-            dispatch(getIcons());
+            dispatch(
+              // @ts-ignore
+              getIcons()
+            );
             dispatch({ type: c.UPLOAD_IMAGE_SUCCESS });
             clearInterval(interval);
             // await requestMyImages(
@@ -910,3 +920,32 @@ export function isJsonString(str: any): boolean {
   }
   return true;
 }
+
+export const getProductById = async (
+  instanceId: string,
+  wixProductId: string
+) => {
+  try {
+    return await axios
+      .get(`app/wix/get-product`, {
+        params: { instanceId, wixProductId },
+      })
+      .then(({ data }) => data.product);
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(`Something went wrong: ${err.message}`);
+    }
+  }
+};
+
+export const requestWixProducts = async (instanceId: string, name: string) => {
+  try {
+    return await axios
+      .post(`app/wix/get-products?instanceId=${instanceId}`, { name })
+      .then(({ data }) => data.products);
+  } catch (err) {
+    if (err instanceof Error) {
+      throw new Error(`Something went wrong: ${err.message}`);
+    }
+  }
+};

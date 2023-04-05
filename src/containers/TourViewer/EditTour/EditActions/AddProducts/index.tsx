@@ -2,8 +2,6 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createPortal } from "react-dom";
 import { Form, Formik } from "formik";
-// import { Heading } from "wix-style-react";
-
 import { getCurrentTour } from "../../../../../store/tours/selectors";
 import {
   getKrpanoInterface,
@@ -12,6 +10,7 @@ import {
 import {
   addLinkToProductHotspot,
   deleteLinkToProductHotspot,
+  getProductById,
   updateLinkToProductHotspot,
 } from "../../../../../store/tours/actions";
 import type { Tour } from "../../../../../store/types";
@@ -20,15 +19,12 @@ import {
   HOTSPOT_TYPES,
   ProductHotspot,
 } from "../../../../../store/tours/types";
-
 import { useRemoveHotspotOnImageChange } from "../../../../../utils/hooks/useRemoveHotspotOnImageChange";
 import { useRefreshHotspots } from "../../../../../utils/hooks/useRefreshHotspots";
 import { useAddHotspot } from "../../../../../utils/hooks/useAddHotspot";
 import { getProductHotspotFromTour } from "../../../../../utils/tour";
-
 import type { Krpano, KrpanoPos } from "../../../../../utils/config";
 import { VIEWER_CONFIG } from "../../../../../utils/config";
-
 import FormColorInput from "../../../../../components/Inputs/FormColorInput";
 import FormField from "../../../../../components/Inputs/FormField";
 import DraggableActionBtn from "../DraggableActionBtn";
@@ -43,13 +39,13 @@ import {
   validationSchema,
   Values,
 } from "./form";
-
 import { SvgIconHover } from "./styles";
-
 import { TMP_HOTSPOT, TMP_HOTSPOT_NAME } from "../constants";
 import ProductInput from "../../../../../components/Inputs/ProductInput";
 import HotspotSizeSlider from "../../../../../components/Inputs/HotspotSizeSlider";
 import Tooltip from "../../../../../components/Tooltip";
+import ProductPreview from "../../../../../components/ProductPreview";
+import Wix from "wix-sdk";
 
 type Props = {
   open: boolean;
@@ -59,11 +55,12 @@ type Props = {
 
 const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
   const krpano = useSelector(getKrpanoInterface()) as Krpano;
-  const tour = useSelector(getCurrentTour()) as Tour;
+  const tour = useSelector(getCurrentTour()) as unknown as Tour;
   const tourId = tour.id;
   const imageId = useSelector(getViewerImageId()) as string;
   const addViewerHotspot = useAddHotspot();
   const refreshHotspots = useRefreshHotspots();
+  const instanceId = Wix.Utils.getInstanceId();
 
   const [currentHotspot, setCurrentHotspot] = useState<Values>(initialValues);
   const [eventHandler, setEventHandler] = useState(false);
@@ -93,7 +90,8 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
     (vals: Values) => {
       const commonData = {
         color: vals.color,
-        wixProductId: vals.target,
+        wixProductId: vals.wixProductId,
+        target: vals.target,
         title: vals.title,
         style: vals.icon,
         size: String(vals.size),
@@ -136,7 +134,7 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
   );
 
   const edit = useCallback(
-    (e: any) => {
+    async (e: any) => {
       if (e.scene !== TMP_HOTSPOT_NAME) {
         krpano.call(`removehotspot(${TMP_HOTSPOT_NAME})`);
       }
@@ -147,14 +145,20 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
         imageId
       ) as Hotspot;
 
-      setCurrentHotspot({
-        id: hotspot.id,
-        title: hotspot.title || "",
-        target: hotspot.wixProductId || "",
-        icon: hotspot.style,
-        size: hotspot.size || "0.26",
-        color: hotspot.color,
-      });
+      await getProductById(instanceId, hotspot.wixProductId as string).then(
+        (res) =>
+          setCurrentHotspot({
+            id: hotspot.id,
+            title: hotspot.title || "",
+            target: res.name,
+            wixProductId: hotspot.wixProductId || "",
+            icon: hotspot.style,
+            size: hotspot.size || "0.26",
+            color: hotspot.color,
+            product: res,
+          })
+      );
+
       handleOpen();
     },
     [handleOpen, imageId, krpano, tour]
@@ -201,56 +205,60 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ submitForm }) => (
-            <ActionsSidebar
-              open={open}
-              handleClose={onCancel}
-              onSave={submitForm}
-              onDelete={
-                currentHotspot.id !== TMP_HOTSPOT_NAME ? onDelete : undefined
-              }
-              title={
-                <Tooltip
-                  title="Add Wix products to your virtual tour."
-                  position="right"
-                  theme="#162D3D"
-                >
-                  <span>Add Products</span>
-                </Tooltip>
-              }
-            >
-              <Form
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                }}
+          {({ submitForm }) => {
+            return (
+              <ActionsSidebar
+                open={open}
+                handleClose={onCancel}
+                onSave={submitForm}
+                onDelete={
+                  currentHotspot.id !== TMP_HOTSPOT_NAME ? onDelete : undefined
+                }
+                title={
+                  <Tooltip
+                    title="Add Wix products to your virtual tour."
+                    position="right"
+                    theme="#162D3D"
+                  >
+                    <span>Add Products</span>
+                  </Tooltip>
+                }
               >
-                <UpdateHotspotVals vals={currentHotspot} />
-                <ChangeIcon />
-                <FormField
-                  label="Choose a title"
-                  name="title"
-                  placeholder="Add your title here"
-                  required
-                />
-                <ProductInput
-                  label="Search product name"
-                  name="target"
-                  required
-                  eventHandler={eventHandler}
-                  currentHotspot={currentHotspot}
-                />
-                <IconSelect
-                  label="Choose an icon"
-                  name="icon"
-                  iconNames={HOTSPOT_ICON_NAMES}
-                />
-                <HotspotSizeSlider label="Icon size" name="size" />
-                <FormColorInput label="Choose an icon color" name="color" />
-              </Form>
-            </ActionsSidebar>
-          )}
+                <Form
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                  }}
+                >
+                  <UpdateHotspotVals vals={currentHotspot} />
+                  <ChangeIcon />
+                  <FormField
+                    label="Choose a title"
+                    name="title"
+                    placeholder="Add your title here"
+                    required
+                  />
+                  <ProductInput
+                    label="Search product name"
+                    name="target"
+                    identifier="wixProductId"
+                    required
+                    eventHandler={eventHandler}
+                    currentHotspot={currentHotspot}
+                  />
+                  <ProductPreview name="product" />
+                  <IconSelect
+                    label="Choose an icon"
+                    name="icon"
+                    iconNames={HOTSPOT_ICON_NAMES}
+                  />
+                  <HotspotSizeSlider label="Icon size" name="size" />
+                  <FormColorInput label="Choose an icon color" name="color" />
+                </Form>
+              </ActionsSidebar>
+            );
+          }}
         </Formik>,
         document.getElementById(VIEWER_CONFIG.MAIN_VIEWER_ID) as Element
       )}

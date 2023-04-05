@@ -2,7 +2,6 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import ActionsSidebar from "../ActionsSidebar";
 import DraggableActionBtn from "../DraggableActionBtn";
 import { InfoCircle } from "wix-ui-icons-common";
-// import { Heading, Tooltip } from "wix-style-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getKrpanoInterface,
@@ -10,7 +9,7 @@ import {
 } from "../../../../../store/viewer/selectors";
 import { VIEWER_CONFIG, Krpano, KrpanoPos } from "../../../../../utils/config";
 import { createPortal } from "react-dom";
-import { Form, Formik } from "formik";
+import { Formik } from "formik";
 import {
   INFO_ICON_NAMES,
   initialValues,
@@ -36,9 +35,9 @@ import type { Tour } from "../../../../../store/types";
 import UpdateHotspotVals from "../UpdateHotspotVals";
 import { useRefreshHotspots } from "../../../../../utils/hooks/useRefreshHotspots";
 import RichTextInput from "../../../../../components/Inputs/RichTextInput";
-// import { sanitize } from "dompurify";
 import HotspotSizeSlider from "../../../../../components/Inputs/HotspotSizeSlider";
 import Tooltip from "../../../../../components/Tooltip";
+import { sanitize } from "dompurify";
 
 type Props = {
   open: boolean;
@@ -81,9 +80,10 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const handleSubmit = useCallback(
     (vals: Values) => {
+      console.log("thisi s a data", sanitize(vals.content));
       const commonData = {
         color: vals.color,
-        content: /*sanitize(vals.content)*/ vals.content,
+        content: sanitize(vals.content) /*JSON.stringify(vals.content)*/,
         name: vals.title,
         style: vals.icon,
         size: String(vals.size),
@@ -129,7 +129,7 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
       setCurrentHotspot({
         id: hotspot.id,
         title: hotspot.name,
-        content: hotspot.content,
+        content: sanitize(hotspot.content),
         icon: hotspot.style,
         size: hotspot.size || "0.26",
         color: hotspot.color,
@@ -174,26 +174,26 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
-          {({ submitForm, values }) => (
-            <ActionsSidebar
-              open={open}
-              handleClose={onCancel}
-              onSave={submitForm}
-              onDelete={
-                currentHotspot.id !== TMP_HOTSPOT_NAME ? onDelete : undefined
-              }
-              title={
-                // TODO fix here
-                <Tooltip
-                  title="Add an infospot to any point on your tour to share a story or tell people more."
-                  position="right"
-                  theme="#162D3D"
-                >
-                  <span>Add Infospot</span>
-                </Tooltip>
-              }
-            >
-              <Form>
+          {({ submitForm, values }) => {
+            return (
+              <ActionsSidebar
+                open={open}
+                handleClose={onCancel}
+                onSave={submitForm}
+                onDelete={
+                  currentHotspot.id !== TMP_HOTSPOT_NAME ? onDelete : undefined
+                }
+                title={
+                  // TODO fix here
+                  <Tooltip
+                    title="Add an infospot to any point on your tour to share a story or tell people more."
+                    position="right"
+                    theme="#162D3D"
+                  >
+                    <span>Add Infospot</span>
+                  </Tooltip>
+                }
+              >
                 <UpdateHotspotVals vals={currentHotspot} />
                 <ChangeIcon />
                 <FormField
@@ -205,7 +205,7 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
                 <RichTextInput
                   label="Content"
                   name="content"
-                  // placeholder="Describe your infospot here"
+                  placeholder="Describe your infospot here"
                   required
                   setValueCondition={currentHotspot.id !== values.id}
                   newValue={currentHotspot.content}
@@ -217,9 +217,9 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
                 />
                 <HotspotSizeSlider label="Icon size" name="size" />
                 <FormColorInput label="Choose an icon color" name="color" />
-              </Form>
-            </ActionsSidebar>
-          )}
+              </ActionsSidebar>
+            );
+          }}
         </Formik>,
         document.getElementById(VIEWER_CONFIG.MAIN_VIEWER_ID) as Element
       )}

@@ -89,6 +89,8 @@ const FormField: FC<Props> = ({
                 onChange={(e) => helpers.setValue(e.target.value)}
                 value={field.value}
                 required={required}
+                formNoValidate={false}
+                autoComplete="off"
                 onFocus={() => setFocus(true)}
                 onBlur={() => setFocus(false)}
               />
@@ -96,20 +98,6 @@ const FormField: FC<Props> = ({
           </FormContainer>
         </FormWrapper>
       </InputWrapper>
-      {/*  TODO Fix here*/}
-      {/*<WixFormField*/}
-      {/*  label={<Text light>{label}</Text>}*/}
-      {/*  id={name}*/}
-      {/*  required={required}*/}
-      {/*>*/}
-      {/*  <Input*/}
-      {/*    status={meta.touched && meta.error ? "error" : undefined}*/}
-      {/*    statusMessage={meta.error}*/}
-      {/*    id={name}*/}
-      {/*    {...field}*/}
-      {/*    {...props}*/}
-      {/*  />*/}
-      {/*</WixFormField>*/}
     </FormFieldWrapper>
   );
 };

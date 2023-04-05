@@ -48,14 +48,25 @@ const UploadDrawer: FC<Props> = ({ btnText = "Upload", width = 420 }) => {
 
   return (
     <>
-      <UploadBtn fullWidth onClick={handleOpen}>
+      <UploadBtn
+        fullWidth
+        onClick={(e) => {
+          e.preventDefault();
+          handleOpen();
+        }}
+      >
         {btnText}
       </UploadBtn>
       <Drawer ref={wrapperRef} open={open} width={width}>
         <SidePanel width={width}>
           <HeaderWrapper>
             <HeaderText>Upload 360° Images</HeaderText>
-            <CloseBtn onClick={handleClose}>
+            <CloseBtn
+              onClick={(e) => {
+                e.preventDefault();
+                handleClose();
+              }}
+            >
               <Dismiss color="#3899ec" />
             </CloseBtn>
           </HeaderWrapper>

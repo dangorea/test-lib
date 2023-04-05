@@ -197,14 +197,12 @@ export type Link = {
   title?: string;
   width?: string;
   toUpload?: boolean;
+  firstDrop?: boolean;
 };
 
 export type Level = {
   id: string;
   name: string;
   title: string;
-  url: string;
-  links: Link[];
+  links: Link[] | null;
 };
-
-export type SelectedImage = File | Level | null;

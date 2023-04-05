@@ -1,7 +1,5 @@
 import type { AnyAction, Dispatch } from "redux";
-
 import {
-  getIcons,
   getTourPreview,
   requestFullTour,
   requestMyTours,
@@ -11,9 +9,6 @@ import tourC from "../tours/constants";
 import c from "./constants";
 import { requestMyImages } from "../images/actions";
 import { getWidgetSettings } from "../widget/actions";
-import { setTimer } from "../test/reducer";
-import { CONFIG } from "../../utils/config";
-import type { RootState } from "../types";
 
 export const setViewerImageId = (id: State["imageId"]): AnyAction => ({
   type: c.SET_VIEWER_IMAGE_ID,
@@ -41,7 +36,7 @@ export const openTourViewer =
   (dispatch: any): void => {
     dispatch(requestFullTour(tourId));
     // dispatch(setTimer("test succeed"));
-    CONFIG.client !== "viarLive" && dispatch(getWidgetSettings());
+    dispatch(getWidgetSettings());
     dispatch(getTourPreview(tourId));
     dispatch(setViewerTourId(tourId));
     dispatch(requestMyTours());

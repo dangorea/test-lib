@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { HexColorPicker } from "react-colorful";
 import {
   ButtonBtnWrapper,

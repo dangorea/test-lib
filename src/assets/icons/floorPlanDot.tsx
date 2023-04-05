@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const FloorPlanDot = () => (
   <svg
@@ -14,7 +14,7 @@ const FloorPlanDot = () => (
       cy="17.2256"
       r="15.493"
       stroke="#0071E0"
-      stroke-width="2.81691"
+      strokeWidth="2.81691"
     />
     <circle cx="17.6282" cy="17.2256" r="8.45072" fill="#0071E0" />
   </svg>

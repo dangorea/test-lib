@@ -143,7 +143,7 @@ const IconSelect: FC<Props> = ({ label, name, iconNames, setCurrentStyle }) => {
             type="file"
             onChange={(e) => uploadFiles(e.target.files as FileList)}
             multiple
-            accept=".jpeg,.jpg,.png,.svg"
+            accept=".jpeg,.jpg,.png"
             style={{ display: "none" }}
           />
         </UploadBtnWrapper>

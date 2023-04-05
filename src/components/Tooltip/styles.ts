@@ -2,20 +2,22 @@ import styled from "styled-components";
 
 export const TooltipWrapper = styled.div`
   position: relative;
-  //display: inline-block;
   margin: 0;
   padding: 0;
   max-width: 200px;
+  //word-break: break-all;
   height: inherit;
   font-weight: 400;
   font-size: 28px;
   line-height: 36px;
+  z-index: 599;
 
   &:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
     width: max-content;
     max-width: 200px;
+    word-wrap: break-word;
   }
 `;
 

@@ -12,13 +12,13 @@ type Props = {
   styles?: StyledProps<any>;
 };
 
-function Tooltip({
+const Tooltip = ({
   title,
   children,
   position = "bottom",
-  theme,
+  theme = "#162D3D",
   styles,
-}: Props) {
+}: Props) => {
   return (
     <TooltipWrapper>
       <ChildrenWrapper>{children}</ChildrenWrapper>
@@ -28,10 +28,9 @@ function Tooltip({
         style={...styles}
       >
         <span>{title}</span>
-        {/*<Arrow />*/}
       </TooltipText>
     </TooltipWrapper>
   );
-}
+};
 
 export default Tooltip;

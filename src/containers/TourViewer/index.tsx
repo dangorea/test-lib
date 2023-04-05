@@ -13,7 +13,6 @@ type Props = {
 };
 
 const TourViewer: FC<Props> = ({ id }) => {
-  const dispatch = useDispatch();
   const tourMode = useSelector(getViewerTourMode());
 
   return tourMode === TOUR_MODES.PREVIEW ? <PreviewOverlay /> : <EditTour />;

@@ -61,6 +61,12 @@ const EditActions: FC = () => {
     handleClose: handleCloseFloorPlan,
   } = useOpen();
 
+  const {
+    open: openUpdateCover,
+    handleOpen: handleOpenUpdateCover,
+    handleClose: handleCloseUpdateCover,
+  } = useOpen();
+
   useEffect(() => {
     if (tourMode === TOUR_MODES.PREVIEW) {
       setToggleAnimation(false);
@@ -73,9 +79,9 @@ const EditActions: FC = () => {
       timeout={200}
       appear
       classNames="my-node"
-      ref={nodeRef}
+      nodeRef={nodeRef}
     >
-      <EditActionsWrapper>
+      <EditActionsWrapper ref={nodeRef}>
         {CONFIG.subscriptionPlan.features.includes("ECOMMERCE") ? (
           <AddProducts
             open={openProducts}
@@ -85,6 +91,7 @@ const EditActions: FC = () => {
               handleCloseInfo();
               handleCloseFlat();
               handleCloseFloorPlan();
+              handleCloseUpdateCover();
               handleOpenProducts();
             }}
             handleClose={handleCloseProducts}
@@ -100,6 +107,7 @@ const EditActions: FC = () => {
             handleCloseProducts();
             handleCloseFlat();
             handleCloseFloorPlan();
+            handleCloseUpdateCover();
             handleOpenHot();
           }}
           handleClose={handleHotClose}
@@ -112,6 +120,7 @@ const EditActions: FC = () => {
             handleCloseProducts();
             handleHotClose();
             handleCloseFloorPlan();
+            handleCloseUpdateCover();
             handleOpenFlat();
           }}
           handleClose={handleCloseFlat}
@@ -124,6 +133,7 @@ const EditActions: FC = () => {
             handleCloseProducts();
             handleCloseFlat();
             handleCloseFloorPlan();
+            handleCloseUpdateCover();
             handleOpenInfo();
           }}
           handleClose={handleCloseInfo}
@@ -136,27 +146,41 @@ const EditActions: FC = () => {
             handleCloseProducts();
             handleCloseFloorPlan();
             handleCloseFlat();
+            handleCloseUpdateCover();
             handleOpenLink();
           }}
           handleClose={handleCloseLink}
         />
-        <UpdateCover />
+        <UpdateCover
+          open={openUpdateCover}
+          handleOpen={() => {
+            handleCloseInfo();
+            handleHotClose();
+            handleCloseProducts();
+            handleCloseFloorPlan();
+            handleCloseFlat();
+            handleCloseLink();
+            handleOpenUpdateCover();
+          }}
+          handleClose={handleCloseUpdateCover}
+        />
         <UpdateTourStartingPoint />
-        {/*{CONFIG.subscriptionPlan.features.includes("FLOOR_PLAN") ? (*/}
-        {/*  <AddFloorPlan*/}
-        {/*    open={openFloorPlan}*/}
-        {/*    handleOpen={() => {*/}
-        {/*      handleCloseInfo();*/}
-        {/*      handleHotClose();*/}
-        {/*      handleCloseProducts();*/}
-        {/*      handleCloseFlat();*/}
-        {/*      handleOpenFloorPlan();*/}
-        {/*    }}*/}
-        {/*    handleClose={handleCloseFloorPlan}*/}
-        {/*  />*/}
-        {/*) : (*/}
-        {/*  <AddFloorPlanPremiumBtn />*/}
-        {/*)}*/}
+        {CONFIG.subscriptionPlan.features.includes("FLOOR_PLAN") ? (
+          <AddFloorPlan
+            open={openFloorPlan}
+            handleOpen={() => {
+              handleCloseInfo();
+              handleHotClose();
+              handleCloseProducts();
+              handleCloseFlat();
+              handleCloseUpdateCover();
+              handleOpenFloorPlan();
+            }}
+            handleClose={handleCloseFloorPlan}
+          />
+        ) : (
+          <AddFloorPlanPremiumBtn />
+        )}
       </EditActionsWrapper>
     </CSSTransition>
   );

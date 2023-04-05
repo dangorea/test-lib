@@ -1,10 +1,4 @@
 import React, { FC, useRef } from "react";
-// import {
-//   ColorInput,
-//   FormField as WixFormField,
-//   PopoverProps,
-//   Text,
-// } from "wix-style-react";
 import { useField } from "formik";
 import {
   Input,
@@ -32,7 +26,6 @@ const FormColorInput: FC<Props> = ({ label, name, required = false }) => {
   const [field, _, helpers] = useField(name);
   const popover = useRef(null);
   const { open, handleOpen, handleClose } = useOpen();
-
   useOutsideAction(popover, handleClose);
 
   return (
@@ -50,7 +43,7 @@ const FormColorInput: FC<Props> = ({ label, name, required = false }) => {
                 onChange={(e) => helpers.setValue(`#${e.target.value}`)}
                 required={required}
               />
-              <Swatch style={{ backgroundColor: field.value }} /*onClick={}*/ />
+              <Swatch style={{ backgroundColor: field.value }} />
             </InputPadding>
           </InputContainer>
         </InputWrapper>
@@ -64,31 +57,6 @@ const FormColorInput: FC<Props> = ({ label, name, required = false }) => {
         </Popover>
       </Picker>
     </FormFieldWrapper>
-
-    /*<FormFieldWrapper>
-      {/!*TODO Fix here*!/}
-      <WixFormField
-        label={<Text light>{label}</Text>}
-        id={name}
-        required={required}
-      >
-        <ColorInput
-          status={meta.touched && meta.error ? "error" : undefined}
-          statusMessage={meta.error}
-          popoverAppendTo="scrollParent"
-          popoverProps={
-            {
-              placement: "auto",
-            } as Partial<PopoverProps>
-          }
-          id={name}
-          onConfirm={(color) => helpers.setValue(color)}
-          {...field}
-          {...props}
-          onChange={(color) => helpers.setValue(color)}
-        />
-      </WixFormField>
-    </FormFieldWrapper>*/
   );
 };
 

@@ -1,7 +1,5 @@
-import React, { FC, ReactElement } from "react";
-// import { Button, TextButton } from "wix-style-react";
+import React, { FC, ReactElement, ReactNode } from "react";
 import { Dismiss } from "wix-ui-icons-common";
-
 import {
   CloseBtn,
   SidebarTitle,
@@ -10,13 +8,16 @@ import {
 import {
   ActionsSidebarBottomBtns,
   ActionsSidebarContent,
+  CancelBtn,
+  DeleteBtn,
   DeleteWrapper,
+  SaveBtn,
 } from "./styles";
 
 type Props = {
   open: boolean;
   title: string | ReactElement;
-  children: any;
+  children: ReactNode | undefined;
   handleClose: () => void;
   onSave: () => void;
   onDelete?: () => void;
@@ -35,24 +36,16 @@ const ActionsSidebar: FC<Props> = ({
       <CloseBtn onClick={handleClose}>
         <Dismiss />
       </CloseBtn>
-      <SidebarTitle light appearance="H2">
-        {title}
-      </SidebarTitle>
+      <SidebarTitle>{title}</SidebarTitle>
       <ActionsSidebarContent>{children}</ActionsSidebarContent>
       <ActionsSidebarBottomBtns>
         {onDelete && (
           <DeleteWrapper>
-            {/*  TODO Fix here*/}
-            {/*<Button skin="destructive" onClick={onDelete}>*/}
-            {/*  Delete*/}
-            {/*</Button>*/}
+            <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
           </DeleteWrapper>
         )}
-        {/*  TODO fix here */}
-        {/*<TextButton skin="light" onClick={handleClose}>*/}
-        {/*  Cancel*/}
-        {/*</TextButton>*/}
-        {/*<Button onClick={onSave}>Save</Button>*/}
+        <CancelBtn onClick={handleClose}>Cancel</CancelBtn>
+        <SaveBtn onClick={onSave}>Save</SaveBtn>
       </ActionsSidebarBottomBtns>
     </SidebarWrapper>
   );

@@ -6,7 +6,6 @@ import type { Tour } from "../../../../store/types";
 import type { Hotspot } from "../../../../store/tours/types";
 import { getHotspotFromTour } from "../../../../utils/tour";
 import { CONFIG } from "../../../../utils/config";
-import { Content, PreviewWrapper } from "./style";
 // import { sanitize } from "dompurify";
 
 const FlatspotImagePreview: FC = () => {
@@ -42,7 +41,17 @@ const FlatspotImagePreview: FC = () => {
 
   return (
     // TODO Fix here
-    <></>
+    <div
+      style={{
+        position: "absolute",
+        display: "block",
+        background: "red",
+        width: "100px",
+        height: "100px",
+      }}
+    >
+      test
+    </div>
     // <Modal isOpen={!!flatspot?.content}>
     //   <ModalPreviewLayout
     //     title={flatspot?.name}

@@ -20,7 +20,7 @@ import InfospotContentDrawer from "./InfospotContentDrawer";
 import GalleryspotContentDrawer from "./GalleryspotContentDrawer";
 import ProductSpotIframeDrawer from "./ProductspotIframeDrawer";
 import type { Krpano } from "../../../utils/config";
-import PreviewFloorPlan from "./PreviewFloorPlan";
+// import PreviewFloorPlan from "./PreviewFloorPlan";
 import FlatspotImagePreview from "./FlatspotImagePreview";
 
 const PreviewOverlay: FC = () => {
@@ -80,7 +80,7 @@ const PreviewOverlay: FC = () => {
       )}
       {/*<PreviewFloorPlan />*/}
       <InfospotContentDrawer />
-      {/*<ProductSpotIframeDrawer />*/}
+      <ProductSpotIframeDrawer />
       <FlatspotImagePreview />
       <PreviewBottomBar />
     </>

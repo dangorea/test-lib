@@ -1,12 +1,17 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import { getHotspotFromTour } from "../../../../utils/tour";
 import type { Hotspot } from "../../../../store/tours/types";
-// import { sanitize } from "dompurify";
 import { useSelector } from "react-redux";
 import { getCurrentTour } from "../../../../store/tours/selectors";
 import type { Tour } from "../../../../store/types";
-import { ContentDrawer } from "./styles";
-// import { SidePanel } from "wix-style-react";
+import {
+  CloseBtn,
+  ContentDrawer,
+  HeaderWrapper,
+  RichTextPreview,
+} from "./styles";
+import Dismiss from "images/dismiss";
+import { sanitize } from "dompurify";
 
 const INFO_CONTENT_DRAWER_WIDTH = 540;
 
@@ -18,11 +23,11 @@ const InfospotContentDrawer: FC = () => {
   const showInfospotContent = useCallback(
     (e: any) => {
       const hotspot = getHotspotFromTour(tour, e.scene) as Hotspot;
-      hotspot.content = hotspot.content.replace(
-        /href/g,
-        'target="_blank" href'
-      );
-
+      // hotspot.content = hotspot.content.replace(/\\n/g, "");
+      // hotspot.content = hotspot.content.replace("\\", "");
+      // hotspot.content = hotspot.content.replace(/"/g, "");
+      // hotspot.content = hotspot.content.replace('\\n"', "");
+      // hotspot.content = hotspot.content.replace('n"', "");
       setInfospot(hotspot);
     },
     [tour]
@@ -37,21 +42,17 @@ const InfospotContentDrawer: FC = () => {
 
   return (
     <ContentDrawer open={!!infospot?.content} width={INFO_CONTENT_DRAWER_WIDTH}>
-      {/*  TODO fix here */}
-      {/*<SidePanel onCloseButtonClick={() => setInfospot(null)} width={"100%"}>*/}
-      {/*  <SidePanel.Header*/}
-      {/*    title={infospot?.name as string}*/}
-      {/*    showDivider={false}*/}
-      {/*    className="wix-sidepanel-header"*/}
-      {/*  />*/}
-      {/*  <SidePanel.Content className="wix-sidepanel-content">*/}
-      {/*    <div*/}
-      {/*      dangerouslySetInnerHTML={{*/}
-      {/*        __html: sanitize(infospot?.content || ""),*/}
-      {/*      }}*/}
-      {/*    />*/}
-      {/*  </SidePanel.Content>*/}
-      {/*</SidePanel>*/}
+      <HeaderWrapper>
+        <div>{infospot?.name}</div>
+        <CloseBtn onClick={() => setInfospot(null)}>
+          <Dismiss />
+        </CloseBtn>
+      </HeaderWrapper>
+      <RichTextPreview
+        dangerouslySetInnerHTML={{
+          __html: sanitize(infospot?.content || ""),
+        }}
+      />
     </ContentDrawer>
   );
 };

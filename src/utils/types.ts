@@ -163,7 +163,7 @@ export interface Tour {
   visibility: any;
   editable: boolean;
   userTags: Array<unknown>;
-  tourFloorPlan: { levels: Level[] };
+  tourFloorPlan: { levels: Level[]; showHotspotTitles: boolean };
 }
 
 export interface PaginationMetadata {
@@ -262,8 +262,6 @@ export type Level = {
   url: string;
   links: Link[];
 };
-
-export type SelectedImage = File | Level | null;
 
 export type ViewerDropResult = {
   x: number;

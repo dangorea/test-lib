@@ -43,7 +43,7 @@ const DraggableActionBtn: FC<Props> = ({ icon, tooltip, onDrop }) => {
       title={tooltip}
       position="right"
       theme="#162D3D"
-      styles={{ top: "0px", left: "111%" }}
+      styles={{ top: "0px", left: "115%" }}
     >
       <DraggableActionBtnWrapper ref={drag} isDragging={isDragging}>
         <img src={move} alt="move" width="15px" height="15px" />

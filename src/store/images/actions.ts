@@ -80,7 +80,6 @@ export const uploadImage =
 
       await evaporate.add(addConfig, overrides);
 
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       const interval = setInterval(async (): Promise<void> => {
         try {
           const { data: newImageData } = await axios.get(

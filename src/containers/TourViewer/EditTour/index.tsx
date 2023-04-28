@@ -16,14 +16,13 @@ import {
 } from "../../../store/viewer/selectors";
 import { getCurrentTour } from "../../../store/tours/selectors";
 import { TMP_HOTSPOT_NAME } from "./EditActions/constants";
-import type { Tour } from "../../../store/types";
 import {
   Hotspot,
   HOTSPOT_TYPES,
   ProductHotspot,
 } from "../../../store/tours/types";
 import type { Krpano } from "../../../utils/config";
-import type { LinkHotspot } from "../../../utils/types";
+import type { LinkHotspot, Tour } from "../../../utils/types";
 import EditActions from "./EditActions";
 import EditBottomBar from "./EditBottomBar";
 import EditControls from "./EditControls";
@@ -57,6 +56,7 @@ const EditTour: FC = () => {
           ) as LinkHotspot;
         }
         dispatch(
+          // @ts-ignore
           updateLinkToImageHotspot(tour.id, imageId, hotspotId, {
             ...linkHotspot,
             atv: krpano.get(`hotspot[${hotspotId}].atv`),
@@ -75,6 +75,7 @@ const EditTour: FC = () => {
           ) as ProductHotspot;
         }
         dispatch(
+          // @ts-ignore
           updateLinkToProductHotspot(tour.id, imageId, hotspotId, {
             ...productHotspot,
             atv: krpano.get(`hotspot[${hotspotId}].atv`),
@@ -83,6 +84,7 @@ const EditTour: FC = () => {
         );
       } else {
         dispatch(
+          // @ts-ignore
           updateHotspot(tour.id, imageId, hotspotId, {
             ...hotspot,
             atv: krpano.get(`hotspot[${hotspotId}].atv`),

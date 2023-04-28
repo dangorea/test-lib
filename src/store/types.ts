@@ -5,11 +5,12 @@ import type {
   ProductHotspot,
   State as ToursState,
 } from "./tours/types";
+import type { State as ConfigState } from "./config/types";
 import type { State as NotificationsState } from "./notifications/types";
 import type { State as WidgetState } from "./widget/types";
 import type { State as ViewerState } from "./viewer/types";
-import type { TOUR_VISIBILITY } from "./constants/tours";
 import type { IMAGE_STATUSES } from "./constants/images";
+import type { SPHERE_TYPES } from "../utils/types";
 
 export interface RootState {
   images: ImagesState;
@@ -17,10 +18,7 @@ export interface RootState {
   notifications: NotificationsState;
   viewer: ViewerState;
   widget: WidgetState;
-  config: {
-    source: string;
-    bucket: string;
-  };
+  config: ConfigState;
 }
 
 export type StartingPoint = {
@@ -59,7 +57,7 @@ export interface Image360 {
     type: SPHERE_TYPES;
     multires: string;
     tilesize: string;
-    levels: Array<{
+    levels: {
       tiledimagewidth: string;
       tiledimageheight: string;
       cube: {
@@ -71,43 +69,17 @@ export interface Image360 {
       sphere: {
         url: string;
       };
-    }>;
+    }[];
   };
   hotSpots: Hotspot[];
   links: LinkHotspot[];
-  wixProducts: Array<ProductHotspot>;
+  wixProducts: ProductHotspot[];
   startingPoint: StartingPoint;
   exif: {
     [fileInfo: string]: string;
   };
   userTags: string[];
   index?: number;
-}
-
-export enum SPHERE_TYPES {
-  CUBE = "CUBE",
-  CYLINDER = "CYLINDER",
-  SPHERE = "SPHERE",
-}
-
-export interface Tour {
-  id: string;
-  user: {
-    nickname: string;
-    userType: "FREE" | "PRO";
-  };
-  createdAt: number;
-  updatedAt: number;
-  title: string;
-  description: string;
-  sphereCount: number;
-  keypoints: Array<unknown>;
-  spheres: Array<Image360>;
-  startingPoint: StartingPoint;
-  visibility: TOUR_VISIBILITY;
-  editable: boolean;
-  userTags: Array<unknown>;
-  tourFloorPlan: { levels: Level[] };
 }
 
 export interface PaginationMetadata {
@@ -137,13 +109,13 @@ export type Product = {
       };
     };
   };
-  productOptions: Array<{
-    choices: Array<{
+  productOptions: {
+    choices: {
       value: string;
       description: string;
       inStock: boolean;
-    }>;
-  }>;
+    }[];
+  }[];
   name: string;
   price: {
     formatted: {
@@ -167,12 +139,12 @@ export type Icon = {
   createdAt: number;
   id: string;
   name: string;
-  serviceTags: Array<string>;
+  serviceTags: string[];
   status: IMAGE_STATUSES;
   title: string;
   updatedAt: number;
   userId: string;
-  userTags: Array<string>;
+  userTags: string[];
 };
 
 export interface FloorPlan {

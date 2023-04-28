@@ -37,3 +37,24 @@ export const GlobalStyle = styled.div`
       /* Linux emoji */ "Noto Color Emoji" !important;
   }
 `;
+
+export const MaskWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const MaskBackground = styled.img`
+  width: 100vw;
+  height: 100vh;
+  filter: blur(4px);
+  cursor: not-allowed;
+`;
+
+export const MaskText = styled.h3`
+  position: absolute;
+  bottom: 40%;
+  color: white;
+  text-align: center;
+  text-shadow: 2px 2px #000000;
+  cursor: not-allowed;
+`;

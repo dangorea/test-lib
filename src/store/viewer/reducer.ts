@@ -2,8 +2,6 @@ import c, { TOUR_MODES } from "./constants";
 import type { State } from "./types";
 import type { Reducers } from "../types";
 import type { AnyAction } from "redux";
-// import { createSlice } from "@reduxjs/toolkit";
-// import { HYDRATE } from "next-redux-wrapper";
 
 const initialState: State = {
   imageId: null,
@@ -70,20 +68,3 @@ const viewerReducer = (state = initialState, action: AnyAction): State => {
 };
 
 export default viewerReducer;
-
-// export default createSlice({
-//   name: "viewerReducer",
-//   initialState,
-//   reducers: {
-//     viewerReducer,
-//   },
-//   extraReducers: {
-//     [HYDRATE]: (state, action) => {
-//       console.log("HYDRATE", { state, action });
-//       return {
-//         ...state,
-//         ...action.payload,
-//       };
-//     },
-//   },
-// });

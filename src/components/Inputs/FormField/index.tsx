@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { useField } from "formik";
 import {
   ErrorNotification,
@@ -13,19 +13,12 @@ import {
 } from "./styles";
 import exclamation from "../../../assets/icons/exclamation-icon.svg";
 import Tooltip from "../../Tooltip";
-// import type { InputProps } from "wix-style-react/dist/es/src/Input";
-// import { FormField as WixFormField, Input, Text } from "wix-style-react";
-
-export enum TypeFormField {
-  URL = "url",
-}
 
 type Props = {
   label: string;
   name: string;
   required: boolean;
   placeholder: string;
-  type?: TypeFormField;
 };
 
 const FormField: FC<Props> = ({
@@ -33,37 +26,9 @@ const FormField: FC<Props> = ({
   name,
   required = false,
   placeholder,
-  type,
 }) => {
-  const [field, _, helpers] = useField(name);
-  const [invalidField, setInvalidField] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [field, meta, helpers] = useField(name);
   const [focus, setFocus] = useState<boolean>(false);
-  const urlPattern =
-    /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[A-Z, a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
-
-  useEffect(() => {
-    // TODO improve this
-    if (!field.value && required) {
-      setInvalidField(true);
-      setErrorMessage("Required");
-    } else {
-      setInvalidField(false);
-    }
-
-    if (
-      type === TypeFormField.URL &&
-      !field.value.match(urlPattern) &&
-      field.value
-    ) {
-      setErrorMessage("Should be valid url");
-      setInvalidField(true);
-    } else if (type === TypeFormField.URL && !field.value) {
-      setErrorMessage("Required");
-    } else if (type === TypeFormField.URL) {
-      setInvalidField(false);
-    }
-  }, [field.value]);
 
   return (
     <FormFieldWrapper>
@@ -73,12 +38,12 @@ const FormField: FC<Props> = ({
       </Label>
       <InputWrapper>
         <FormWrapper>
-          <FormContainer focus={focus} error={invalidField}>
+          <FormContainer focus={focus} error={!!(meta.touched && meta.error)}>
             <InputContainer>
-              {invalidField && (
+              {meta.touched && meta.error && (
                 <ErrorNotification>
-                  <Tooltip title={errorMessage} position="left" theme="#162D3D">
-                    <img src={exclamation} alt="exclamation" />
+                  <Tooltip title={meta.error} position="left" theme="#162D3D">
+                    <img src={exclamation} alt="" />
                   </Tooltip>
                 </ErrorNotification>
               )}
@@ -86,13 +51,16 @@ const FormField: FC<Props> = ({
                 id={name}
                 type="text"
                 placeholder={placeholder}
-                onChange={(e) => helpers.setValue(e.target.value)}
-                value={field.value}
                 required={required}
                 formNoValidate={false}
                 autoComplete="off"
                 onFocus={() => setFocus(true)}
-                onBlur={() => setFocus(false)}
+                onChange={field.onChange}
+                value={field.value}
+                onBlur={() => {
+                  setFocus(false);
+                  helpers.setTouched(true);
+                }}
               />
             </InputContainer>
           </FormContainer>

@@ -1,6 +1,5 @@
 import React, { FC } from "react";
-// import { Notification } from "@wix/design-system";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getNotifications } from "../../store/notifications/selectors";
 import {
   Notification,
@@ -13,12 +12,8 @@ import { NotificationTypes } from "../../store/notifications/constants";
 
 const Notifications: FC = () => {
   const notifications = useSelector(getNotifications());
-  const dispatch = useDispatch();
-
-  // TODO Fix here
 
   return (
-    //   TODO Fix here
     <NotificationsWrapper>
       {notifications.map(({ msg, type, id }) => (
         <Notification key={id} type={type}>
@@ -30,17 +25,6 @@ const Notifications: FC = () => {
             {msg}
           </NotificationContent>
         </Notification>
-        // <Notification
-        //   theme={type}
-        //   show
-        //   autoHideTimeout={1000}
-        //   zIndex={1000}
-        //   onClose={() => dispatch({ type: TOUR_CONSTANTS.REMOVE_NOTIFICATION, payload: id })}
-        //   key={id}
-        // >
-        //   <Notification.TextLabel>{msg}</Notification.TextLabel>
-        //   <Notification.CloseButton />
-        // </Notification>
       ))}
     </NotificationsWrapper>
   );

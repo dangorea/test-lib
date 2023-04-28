@@ -30,7 +30,6 @@ const PreviewTitle: FC<Props> = ({
           {/*  onChange={({ target: { value } }) => setNewTitle(value)}*/}
           {/*/>*/}
           <TitleEditBtn
-            size="tiny"
             onClick={() => {
               changeTitle(newTitle);
               setIsEditingTitle(false);
@@ -38,11 +37,7 @@ const PreviewTitle: FC<Props> = ({
           >
             <Check />
           </TitleEditBtn>
-          <TitleEditBtn
-            priority="secondary"
-            size="tiny"
-            onClick={() => setIsEditingTitle(false)}
-          >
+          <TitleEditBtn onClick={() => setIsEditingTitle(false)}>
             <Dismiss />
           </TitleEditBtn>
         </div>

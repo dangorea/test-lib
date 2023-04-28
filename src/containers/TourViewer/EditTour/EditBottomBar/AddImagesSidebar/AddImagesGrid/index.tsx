@@ -35,6 +35,10 @@ const AddImagesGrid: FC<Props> = ({ selected, setSelected }) => {
   const size = useWindowSize();
   const imagesPerPage = (size?.height as number) < 700 ? 6 : 9;
 
+  if (!images && !imagesMeta && !imagesPerPage) {
+    return null;
+  }
+
   return (
     <AddImagesGridWrapper>
       <AddImgGrid>
@@ -47,11 +51,13 @@ const AddImagesGrid: FC<Props> = ({ selected, setSelected }) => {
           />
         ))}
       </AddImgGrid>
-      <AddImagesGridPagination
-        requestHandler={requestMyImages}
-        perPage={imagesPerPage}
-        metadata={imagesMeta}
-      />
+      {imagesMeta && imagesPerPage && (
+        <AddImagesGridPagination
+          requestHandler={requestMyImages}
+          perPage={imagesPerPage}
+          metadata={imagesMeta}
+        />
+      )}
     </AddImagesGridWrapper>
   );
 };

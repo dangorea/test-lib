@@ -12,9 +12,9 @@ import {
   SphereSelectDrawer,
   SphereSelectImageGrid,
   FormFieldWrapper,
+  Select,
 } from "./styles";
-import { Select } from "../../../containers/MyImages/ImageGrid/ImageItem/styles";
-import UploadDrawer from "../../../containers/MyImages/Actionbar/UploadDrawer";
+import UploadDrawer from "../../../components/UploadDrawer";
 import type { Image360 } from "../../../store/types";
 import { getPreviewSrc } from "../../../utils/image";
 import ImageViewer from "../../ImageViewer";
@@ -25,14 +25,6 @@ import {
   RequiredField,
 } from "../SphereInput/styles";
 import Checkbox from "../../Checkbox";
-// import {
-//   Button,
-//   Checkbox,
-//   FormField as WixFormField,
-//   ImageViewer,
-//   Text,
-// } from "wix-style-react";
-// import type { ImageViewerProps } from "wix-style-react/dist/types/ImageViewer";
 
 type Props = {
   label: string;
@@ -48,7 +40,6 @@ const FlatImageInput: FC<Props> = ({
   required = false,
   height,
   width,
-  ...props
 }) => {
   const [field, meta, helpers] = useField(name);
   const [heightField, , heightHelpers] = useField(height);
@@ -95,6 +86,7 @@ const FlatImageInput: FC<Props> = ({
             width={64}
             imageUrl={sphere ? getPreviewSrc(sphere) : ""}
             onUpdateImage={handleImage}
+            error={meta.touched && !field.value}
           />
         </PreviewWrapper>
       </FormFieldWrapper>
@@ -146,6 +138,7 @@ const FlatImageInput: FC<Props> = ({
               helpers.setValue(tmpSelectedSphere?.id);
               heightHelpers.setValue(tmpSelectedSphere?.height);
               widthHelpers.setValue(tmpSelectedSphere?.width);
+              helpers.setTouched(true);
               handleClose();
               setTmpSelectedSphere(null);
             }}

@@ -1,19 +1,17 @@
-import type { SPHERE_TYPES } from './types';
+import type { SPHERE_TYPES } from "./types";
 import { CONFIG } from "./config";
 
 const isMobile = window.screen.availWidth < 800;
 
-const distorted = 'true';
-
-// Skin styles
+const distorted = "true";
 
 const skinsXml = (sphereType?: SPHERE_TYPES): string => {
-    const isCube = sphereType === 'CUBE';
+  const isCube = sphereType === "CUBE";
 
-    const mobileSpotSize = isCube ? '0.42' : '0.21';
-    const screenSpotSize = isCube ? '0.26' : '0.10';
+  const mobileSpotSize = isCube ? "0.42" : "0.21";
+  const screenSpotSize = isCube ? "0.26" : "0.10";
 
-    const skinHotspotstyle = `
+  const skinHotspotstyle = `
     <style name='skin_hotspotstyle_default'
       scale='${isMobile ? mobileSpotSize : screenSpotSize}' 
       edge='center' 
@@ -76,7 +74,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinDrag = `
+  const skinDrag = `
     <style name='skin_drag' 
     edge='center' 
     distorted='${distorted}'
@@ -110,7 +108,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinDragActive = `
+  const skinDragActive = `
     <style name='skin_drag_active' 
       edge='center' 
       distorted='${distorted}'
@@ -144,7 +142,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinInfoSpot = `
+  const skinInfoSpot = `
     <style name='skin_infospot' 
       edge='center'
       distorted='true' 
@@ -181,7 +179,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinInfoSpotActive = `
+  const skinInfoSpotActive = `
     <style name='skin_infospot_active' 
       edge='center'
       distorted='${distorted}' 
@@ -241,7 +239,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     </action>
   `;
 
-    const skinLinkSpot = `
+  const skinLinkSpot = `
     <style name='skin_linkspot' 
       edge='center'
       distorted='${distorted}' 
@@ -283,7 +281,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinLinkSpotActive = `
+  const skinLinkSpotActive = `
     <style name='skin_linkspot_active' 
       edge='center'
       distorted='${distorted}' 
@@ -321,7 +319,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinProductSpot = `
+  const skinProductSpot = `
     <style name='skin_product' 
       edge='center'
       distorted='${distorted}' 
@@ -363,7 +361,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinProductSpotActive = `
+  const skinProductSpotActive = `
     <style name='skin_product_active' 
       edge='center'
       distorted='${distorted}' 
@@ -401,7 +399,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinFlatImageSpot = `
+  const skinFlatImageSpot = `
     <style name='skin_flatspot' 
       edge='center'
       distorted='${distorted}' 
@@ -441,7 +439,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const skinFlatImageSpotActive = `
+  const skinFlatImageSpotActive = `
     <style name='skin_flatspot_active'
       edge='center'
       distorted='${distorted}' 
@@ -477,7 +475,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const contextMenu = `
+  const contextMenu = `
     <contextmenu customstyle="">
       <item name="kr" caption="KRPANO"     />
       <item name="fs" caption="FULLSCREEN" />
@@ -550,7 +548,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
       tween(view.hlookat, get(new_hlookat), distance(100,0.8));
     </action>`;
 
-    const customActions = `
+  const customActions = `
     <!-- Action to remove bottom bar from vtourskin.xml -->
   
     <action name="skin_hidebottombar">
@@ -571,7 +569,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     />
   `;
 
-    const eventBus = `
+  const eventBus = `
     <action name="fireEvent" type="Javascript">
       <![CDATA[
         var eventName = arguments[1][2];
@@ -587,7 +585,7 @@ const skinsXml = (sphereType?: SPHERE_TYPES): string => {
     </action>
   `;
 
-    return `
+  return `
     ${skinHotspotstyle}
     ${skinDrag}
     ${skinDragActive}

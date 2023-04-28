@@ -15,7 +15,7 @@ import {
   updateLinkToImageHotspot,
 } from "../../../../../store/tours/actions";
 import { isJsonString } from "../../../../../store/tours/actions";
-import type { Tour } from "../../../../../store/types";
+import type { Tour } from "../../../../../utils/types";
 import {
   Hotspot,
   HOTSPOT_TYPES,
@@ -222,6 +222,12 @@ const AddHotspot: FC<Props> = ({ open, handleOpen, handleClose }) => {
       }
 
       const hotspot = getHotspotFromTour(tour, e.scene) as Hotspot;
+
+      if (secondKrpano && hotspot && hotspot.hotspotStartingPoint) {
+        secondKrpano.set("view.hlookat", hotspot.hotspotStartingPoint.ath);
+        secondKrpano.set("view.vlookat", hotspot.hotspotStartingPoint.atv);
+        secondKrpano.set("view.fov", hotspot.hotspotStartingPoint.fov);
+      }
 
       setCurrentHotspot({
         id: hotspot.id,

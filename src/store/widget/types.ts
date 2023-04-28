@@ -1,4 +1,4 @@
-import type { CommonState } from '../types';
+import type { CommonState } from "../types";
 export interface Font {
   family: string;
   variants: string[];
@@ -22,9 +22,9 @@ export type WidgetSettings = {
   autostart: boolean;
   hdl: boolean;
   showTitle: boolean;
-  spt: boolean; // show photoTitle
+  spt: boolean;
   showVr: boolean;
-  sn: boolean; // show navigation
+  sn: boolean;
   manageTours: string;
   source: string;
   showBorder: boolean;
@@ -34,11 +34,10 @@ export type WidgetSettings = {
   };
   borderWidth: number;
   tfa: {
-    // settings of tour title (titleFontAndColor)
     color: string;
     opacity: number;
-    editorKey: string; //font headings(h1, h2, h3, h4, h5, h6) and paragraphs
-    family: string; //font family
+    editorKey: string;
+    family: string;
     fontStyleParam: boolean;
     preset: string;
     size: number;
@@ -50,7 +49,6 @@ export type WidgetSettings = {
     value: string;
   };
   photoData: {
-    // settings of sphere title
     color: string;
     opacity: number;
     editorKey: string;

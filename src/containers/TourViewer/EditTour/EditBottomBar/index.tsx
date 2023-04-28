@@ -2,30 +2,26 @@ import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Transition } from "react-transition-group";
 import { Add, ChevronLeft, ChevronRight } from "wix-ui-icons-common";
-
-import type { Image360, Tour } from "../../../../store/types";
-
+import type { Image360 } from "../../../../store/types";
 import { TOUR_MODES } from "../../../../store/viewer/constants";
 import { setViewerImageId } from "../../../../store/viewer/actions";
 import {
-  getTourId,
+  getKrpanoInterface,
   getViewerImageId,
   getViewerTourMode,
 } from "../../../../store/viewer/selectors";
 import {
   getCurrentTour,
   getCurrentTourId,
+  getHotspots,
 } from "../../../../store/tours/selectors";
-import { CONFIG, VIEWER_CONFIG } from "../../../../utils/config";
-
+import { Krpano, VIEWER_CONFIG } from "../../../../utils/config";
 import {
   isFullAccess,
   redirectOpenBillingPage,
 } from "../../../../utils/premium";
 import useOpen from "../../../../utils/hooks/useOpen";
-
 import { AddImage, ArrowBtn, EditBottomBarWrapper } from "./styles";
-
 import AddImagesSidebar from "./AddImagesSidebar";
 import ImageListItem from "./ImageListItem";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -36,21 +32,28 @@ import { TOUR_ACTIONS } from "../../../../store/tours/constants";
 import UnlinkModal from "../../../../components/UnlinkModal";
 import { getImageTitles } from "../../../../store/images/selector";
 import { createPortal } from "react-dom";
-import ImageUnlinkModal from "./ImageListItem/ImageUnlinkModal";
-import unlinkModal from "../../../../components/UnlinkModal";
+import { getUserConfig } from "../../../../store/config/selectors";
+import type { Tour } from "../../../../utils/types";
 
 SwiperCore.use([Navigation, Keyboard]);
 
 const EditBottomBar: FC = () => {
-  const dispatch = useDispatch();
-  const tour = useSelector(getCurrentTour()) as Tour;
-  const tourMode = useSelector(getViewerTourMode());
-  const imageId = useSelector(getViewerImageId()) as string;
-  const { open, handleOpen, handleClose } = useOpen();
+  const nodeRef = useRef<HTMLDivElement>(null);
+  const [unlinkId, setUnlinkId] = useState<string | null>(null);
   const [animation, setAnimation] = useState(true);
   const [localSpheres, setLocalSpheres] = useState<Array<Image360>>([]);
   const [selectedCurrentTour, setSelectedCurrentTour] = useState<any>(null);
-  const nodeRef = useRef<HTMLDivElement>(null);
+  const { open, handleOpen, handleClose } = useOpen();
+  const tour = useSelector(getCurrentTour()) as Tour;
+  const tourMode = useSelector(getViewerTourMode());
+  const imageId = useSelector(getViewerImageId()) as string;
+  const userConfig = useSelector(getUserConfig());
+  const tourId = useSelector(getCurrentTourId()) as string;
+  const imageTitle = useSelector(getImageTitles([unlinkId as string]));
+  const currentViewerImage = useSelector(getViewerImageId());
+  const hotspots = useSelector(getHotspots(currentViewerImage as string));
+  const krpano = useSelector(getKrpanoInterface()) as Krpano;
+  const dispatch = useDispatch();
 
   const duration = {
     appear: 100,
@@ -60,7 +63,7 @@ const EditBottomBar: FC = () => {
 
   useEffect(() => {
     setLocalSpheres(
-      tour.spheres.map((tour, index: number) => {
+      tour.spheres.map((tour: Image360, index: number) => {
         return { ...tour, index };
       })
     );
@@ -68,8 +71,8 @@ const EditBottomBar: FC = () => {
 
   const openAddImageSidebar = useCallback(() => {
     if (
-      !isFullAccess(CONFIG.subscriptionPlan.id) &&
-      tour.spheres.length >= CONFIG.subscriptionPlan.sphereLimitPerTour
+      !isFullAccess(userConfig.id) &&
+      tour.spheres.length >= userConfig.sphereLimitPerTour
     ) {
       redirectOpenBillingPage();
       return;
@@ -108,8 +111,9 @@ const EditBottomBar: FC = () => {
       .sort((a: Image360, b: Image360) => a.index! - b.index!)
       .map(({ index, ...rest }) => {
         return rest;
-      }) as Array<Image360>;
+      }) as Image360[];
     dispatch(
+      // @ts-ignore
       manageSpheres(
         tour.id,
         lastVersionTours.map((e) => e.id),
@@ -118,13 +122,15 @@ const EditBottomBar: FC = () => {
     );
   }
 
-  const [unlinkId, setUnlinkId] = useState<string | null>(null);
-  const tourId = useSelector(getCurrentTourId()) as string;
-  const imageTitle = useSelector(getImageTitles([unlinkId as string]));
-  const currentViewerImage = useSelector(getViewerImageId());
-
   const unlinkImage = useCallback(() => {
+    hotspots?.forEach((hotspot) => {
+      if (hotspot.target === unlinkId) {
+        krpano.call(`removehotspot(${hotspot.id})`);
+      }
+    });
+
     dispatch(
+      // @ts-ignore
       manageSpheres(
         tourId,
         [unlinkId as string],

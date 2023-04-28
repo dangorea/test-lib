@@ -1,20 +1,24 @@
 import React, { FC, useCallback } from "react";
 import { Button, PreviewActionsWrapper } from "./styles";
 import UpgradeButton from "../../../UpgradeButton/index";
-// import { Button } from "wix-style-react";
 import {
   closeTourViewer,
   setViewerTourMode,
 } from "../../../../store/viewer/actions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TOUR_MODES } from "../../../../store/viewer/constants";
+import { getOnClose } from "../../../../store/config/selectors";
 
 const PreviewActions: FC = () => {
   const dispatch = useDispatch();
+  const onClose = useSelector(getOnClose());
 
   const close = useCallback(() => {
-    dispatch(closeTourViewer());
-    // window.location.replace("/dashboard/mytours"); /*Dumb way to resolve the issue*/
+    onClose();
+    dispatch(
+      // @ts-ignore
+      closeTourViewer()
+    );
   }, [dispatch]);
 
   const edit = useCallback(() => {

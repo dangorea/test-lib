@@ -2,7 +2,6 @@ import c from "./constants";
 import type { State, INotification } from "./types";
 import type { Reducers } from "../types";
 import type { AnyAction } from "redux";
-// import { createSlice } from "@reduxjs/toolkit";
 import { HYDRATE } from "next-redux-wrapper";
 
 const initialState: State = {
@@ -42,20 +41,3 @@ const notificationsReducer = (
 };
 
 export default notificationsReducer;
-
-// export default createSlice({
-//   name: "notificationsReducer",
-//   initialState,
-//   reducers: {
-//     notificationsReducer,
-//   },
-//   extraReducers: {
-//     [HYDRATE]: (state, action) => {
-//       console.log("HYDRATE", { state, action });
-//       return {
-//         ...state,
-//         ...action.payload,
-//       };
-//     },
-//   },
-// });

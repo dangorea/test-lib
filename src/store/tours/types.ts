@@ -1,5 +1,5 @@
 import type { CommonState, PaginationMetadata, Tour } from "../../utils/types";
-import type { Icon, Product } from "../types";
+import type { Icon } from "../types";
 
 export interface State extends CommonState {
   data:
@@ -10,7 +10,6 @@ export interface State extends CommonState {
     | Record<string, never>;
   currentTour: Tour | null;
   icons: Icon[];
-  products: Product[];
 }
 
 export type SphereViewOptions = {
@@ -70,7 +69,7 @@ export type LinkHotspot = {
 export type ProductHotspot = {
   id: string;
   ath: string;
-  name: string;
+  name?: string;
   atv: string;
   style: string;
   color: string;

@@ -1,6 +1,5 @@
 import { EffectCallback, useEffect } from "react";
 import type { CreateConfig } from "evaporate";
-// import axios, { AxiosRequestConfig } from "axios";
 
 interface CustomEvaporateConfig extends CreateConfig {
   signHeaders: {
@@ -14,12 +13,11 @@ export enum USER_TYPES {
   DEMO = "DEMO",
   BASIC = "BASIC",
   BASIC1 = "BASIC1",
+  ECOMMERCE1 = "ECOMMERCE1",
   PRO = "PRO",
   PRO2 = "PRO2",
   AGENCY = "AGENCY",
 }
-
-// apiUrl: "https://api.wix.viar.live/api/v1/",
 
 export const CONFIG = {
   awsKey: "AKIAJCJRVV7KDOE56BRA",
@@ -45,19 +43,6 @@ export const CONFIG = {
     features: ["FLOOR_PLAN", "ECOMMERCE"],
   },
 };
-
-// TODO remove if not used
-// const AxiosConfig = <AxiosRequestConfig>{
-//   // method: "get",
-//   // url: "https://viar.live/api/v1/tour/tl9e9r?full=true",
-//   headers: {
-//     Authorization: "",
-//     "Content-Type": "application/json",
-//     "Accept-Encoding": "",
-//   },
-//   responseType: "json",
-//   responseEncoding: "utf8",
-// };
 
 export const VIEWER_CONFIG = {
   SCRIPT_PATH: `${CONFIG.krpanoUrl}/tour.js`,
@@ -133,3 +118,8 @@ export const useMountEffect = (effect: EffectCallback): void =>
 export const removePano = (id = VIEWER_CONFIG.MAIN_VIEWER_ID): void => {
   window.removepano(id);
 };
+
+export enum PROJECT {
+  WIX = "wix",
+  VIAR_LIVE = "viarLive",
+}

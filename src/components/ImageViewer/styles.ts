@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const PreviewContainer = styled.div`
+export const PreviewContainer = styled.div<{ error: boolean }>`
   width: 64px;
   height: 64px;
   position: relative;
@@ -16,6 +16,7 @@ export const PreviewContainer = styled.div`
   backface-visibility: hidden;
   transform: translate3d(0, 0, 0);
   z-index: 1;
+  border: ${({ error }) => (error ? "1px solid #ee5951" : "")};
 `;
 
 export const AddBtn = styled.button`

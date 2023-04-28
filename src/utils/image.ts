@@ -1,4 +1,5 @@
-import type { Image360, Tour } from "../store/types";
+import type { Image360 } from "../store/types";
+import type { Tour } from "./types";
 import { CONFIG } from "./config";
 
 export const getPreviewSrc = ({

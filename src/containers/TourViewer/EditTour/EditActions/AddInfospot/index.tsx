@@ -31,13 +31,13 @@ import { useAddHotspot } from "../../../../../utils/hooks/useAddHotspot";
 import { useRemoveHotspotOnImageChange } from "../../../../../utils/hooks/useRemoveHotspotOnImageChange";
 import { getHotspotFromTour } from "../../../../../utils/tour";
 import { getCurrentTour } from "../../../../../store/tours/selectors";
-import type { Tour } from "../../../../../store/types";
+import type { Tour } from "../../../../../utils/types";
 import UpdateHotspotVals from "../UpdateHotspotVals";
 import { useRefreshHotspots } from "../../../../../utils/hooks/useRefreshHotspots";
 import RichTextInput from "../../../../../components/Inputs/RichTextInput";
 import HotspotSizeSlider from "../../../../../components/Inputs/HotspotSizeSlider";
 import Tooltip from "../../../../../components/Tooltip";
-import { sanitize } from "dompurify";
+import * as DOMPurify from "dompurify";
 
 type Props = {
   open: boolean;
@@ -80,10 +80,11 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const handleSubmit = useCallback(
     (vals: Values) => {
-      console.log("thisi s a data", sanitize(vals.content));
       const commonData = {
         color: vals.color,
-        content: sanitize(vals.content) /*JSON.stringify(vals.content)*/,
+        content: DOMPurify.sanitize(
+          vals.content
+        ) /*JSON.stringify(vals.content)*/,
         name: vals.title,
         style: vals.icon,
         size: String(vals.size),
@@ -98,6 +99,7 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
         };
 
         dispatch(
+          // @ts-ignore
           addHotspot(tourId, sphereId, data, (newHotspot) => {
             krpano.call(`removehotspot(${TMP_HOTSPOT_NAME})`);
             addViewerHotspot(newHotspot);
@@ -112,7 +114,10 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
           ...commonData,
         };
 
-        dispatch(updateHotspot(tourId, sphereId, vals.id, data, handleClose));
+        dispatch(
+          // @ts-ignore
+          updateHotspot(tourId, sphereId, vals.id, data, handleClose)
+        );
       }
     },
     [addViewerHotspot, dispatch, handleClose, krpano, sphereId, tour, tourId]
@@ -129,7 +134,7 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
       setCurrentHotspot({
         id: hotspot.id,
         title: hotspot.name,
-        content: sanitize(hotspot.content),
+        content: DOMPurify.sanitize(hotspot.content),
         icon: hotspot.style,
         size: hotspot.size || "0.26",
         color: hotspot.color,
@@ -154,6 +159,7 @@ const AddInfospot: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const onDelete = useCallback(() => {
     dispatch(
+      // @ts-ignore
       deleteHotspot(tourId, sphereId, currentHotspot.id, () => {
         krpano.call(`removehotspot(${currentHotspot.id})`);
         handleClose();

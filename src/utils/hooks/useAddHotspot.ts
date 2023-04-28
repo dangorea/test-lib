@@ -19,7 +19,6 @@ export const getHotspotIconUrl = ({
   if (isJsonString(style)) {
     const icon: Icon = JSON.parse(style);
     return `${CONFIG.storageUrl}/media/${icon.id}/media.png?v=${icon.createdAt}`;
-    // return `${CONFIG.storageUrl}/media/${icon.id}/${icon.name}`;
   }
 
   if (type === HOTSPOT_TYPES.FLAT && target) {

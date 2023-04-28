@@ -1,6 +1,5 @@
 import React, { FC, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   getKrpanoInterface,
   getTypeOfView,
@@ -10,18 +9,17 @@ import { setViewerImageId } from "../../../store/viewer/actions";
 import { getCurrentTour } from "../../../store/tours/selectors";
 import { TOUR_MODES } from "../../../store/viewer/constants";
 import type { Hotspot } from "../../../store/tours/types";
-import type { Tour } from "../../../store/types";
-
+import type { Tour } from "../../../utils/types";
 import { getHotspotFromTour } from "../../../utils/tour";
-
 import PreviewActions from "./PreviewActions";
 import PreviewBottomBar from "./PreviewBottomBar";
 import InfospotContentDrawer from "./InfospotContentDrawer";
-import GalleryspotContentDrawer from "./GalleryspotContentDrawer";
 import ProductSpotIframeDrawer from "./ProductspotIframeDrawer";
 import type { Krpano } from "../../../utils/config";
-// import PreviewFloorPlan from "./PreviewFloorPlan";
 import FlatspotImagePreview from "./FlatspotImagePreview";
+import { getSource } from "../../../store/config/selectors";
+import { PROJECT } from "../../../utils/config";
+import PreviewFloorPlan from "./PreviewFloorPlan";
 
 const PreviewOverlay: FC = () => {
   const dispatch = useDispatch();
@@ -29,6 +27,7 @@ const PreviewOverlay: FC = () => {
   const isEditing = useSelector(getViewerTourMode()) === TOUR_MODES.EDIT;
   const isWidget = useSelector(getTypeOfView());
   const krpano = useSelector(getKrpanoInterface()) as Krpano;
+  const source = useSelector(getSource());
 
   const openHotspotLink = useCallback(
     (e: any) => {
@@ -75,12 +74,15 @@ const PreviewOverlay: FC = () => {
       {!isWidget && (
         <>
           <PreviewActions />
-          <GalleryspotContentDrawer />
         </>
       )}
-      {/*<PreviewFloorPlan />*/}
+      {source === PROJECT.WIX && (
+        <>
+          <PreviewFloorPlan />
+          {/*<ProductSpotIframeDrawer />*/}
+        </>
+      )}
       <InfospotContentDrawer />
-      <ProductSpotIframeDrawer />
       <FlatspotImagePreview />
       <PreviewBottomBar />
     </>

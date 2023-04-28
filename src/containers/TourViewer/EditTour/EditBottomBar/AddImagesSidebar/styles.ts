@@ -1,5 +1,4 @@
 import styled from "styled-components";
-// import { Heading } from "wix-style-react";
 
 export const SidebarWrapper = styled.div<{ open: boolean }>`
   transform: translateX(${({ open }) => (open ? 0 : "540px")});
@@ -26,6 +25,7 @@ export const SidebarWrapper = styled.div<{ open: boolean }>`
   box-shadow: 0 0 18px rgba(0, 0, 0, 0.5);
   transition: transform 0.2s ease-in, opacity 0.2s ease-in;
   color: #fff;
+  cursor: default;
 `;
 
 export const CloseBtn = styled.div`

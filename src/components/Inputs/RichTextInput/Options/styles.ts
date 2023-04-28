@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const LayoutWrapper = styled.div`
   position: absolute;
-  top: 255px;
+  top: 210px;
   left: 106px;
   display: flex;
   gap: 12px;
@@ -29,7 +29,6 @@ export const LayoutWrapper = styled.div`
     border-width: 5px;
     border-style: solid;
     border-color: transparent transparent #fff transparent;
-    box-shadow: 0 6px 6px 0 rgba(22, 45, 61, 0.06);
   }
 
   label {

@@ -3,12 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useField } from "formik";
 import { getCurrentTour } from "../../../store/tours/selectors";
 import { getImage } from "../../../store/images/selector";
-import type { Tour } from "../../../store/types";
+import type { Tour } from "../../../utils/types";
 import { getPreviewSrc } from "../../../utils/image";
 import useOpen from "../../../utils/hooks/useOpen";
 import PreviewItem from "../../../containers/PreviewItem";
 import Viewer from "../../../containers/Viewer";
-import { Select } from "../../../containers/MyImages/ImageGrid/ImageItem/styles";
 import {
   FormFieldWrapper,
   DrawerTitle,
@@ -21,6 +20,7 @@ import {
   Label,
   RequiredField,
   Button,
+  Select,
 } from "./styles";
 import { setViewerImageId } from "../../../store/viewer/actions";
 import { getViewerImageId } from "../../../store/viewer/selectors";
@@ -35,7 +35,7 @@ type Props = {
 };
 
 const SphereInput: FC<Props> = ({ label, name, required = false }) => {
-  const [field, _meta, helpers] = useField(name);
+  const [field, meta, helpers] = useField(name);
   const sphere = useSelector(getImage(field?.value));
   const tour = useSelector(getCurrentTour()) as Tour;
   const { open, handleOpen, handleClose } = useOpen();
@@ -78,6 +78,7 @@ const SphereInput: FC<Props> = ({ label, name, required = false }) => {
             width={64}
             imageUrl={sphere ? getPreviewSrc(sphere) : ""}
             onUpdateImage={handleImage}
+            error={meta.touched && !field.value}
           />
           {field.value && (
             <Button onClick={handleFollowHotspot}>Go to hotspot</Button>
@@ -99,7 +100,7 @@ const SphereInput: FC<Props> = ({ label, name, required = false }) => {
                   onClick={() => setTmpSelectedSphere(image.id)}
                 >
                   <Select>
-                    <Checkbox checked={isSelected} />
+                    <Checkbox checked={isSelected} {...field} />
                   </Select>
                 </PreviewItem>
                 <span style={{ color: "black" }}>{fileName}</span>
@@ -122,6 +123,7 @@ const SphereInput: FC<Props> = ({ label, name, required = false }) => {
             onClick={(e) => {
               e.preventDefault();
               helpers.setValue(tmpSelectedSphere);
+              helpers.setTouched(true);
               handleClose();
               setTmpSelectedSphere(null);
             }}

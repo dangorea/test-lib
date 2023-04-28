@@ -72,8 +72,8 @@ const Viewer: FC<Props> = ({ id, children, isSideViewer }) => {
 
   const loadInitialView = useCallback(() => {
     embedPano({
-      // todo remove consolelog
-      consolelog: false,
+      // // todo remove consolelog
+      // consolelog: false,
       id: isSideViewer
         ? VIEWER_CONFIG.SECOND_VIEWER_ID
         : VIEWER_CONFIG.MAIN_VIEWER_ID,

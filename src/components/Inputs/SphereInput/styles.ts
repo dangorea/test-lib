@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Drawer } from "../../../containers/MyImages/Actionbar/UploadDrawer/styles";
+import { Drawer } from "../../UploadDrawer/styles";
 
 export const FormFieldWrapper = styled.div``;
 
@@ -55,11 +55,6 @@ export const DrawerTitle = styled.div`
 `;
 
 export const SphereSelectActions = styled.div`
-  //display: grid;
-  //grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  //grid-gap: 5px;
-  //flex: 1;
-  //align-items: flex-end;
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
@@ -76,10 +71,6 @@ export const SecondViewerContainer = styled.div`
   width: 100%;
   height: 35%;
   user-select: none;
-
-  //& > * {
-  //  margin-right: 10px;
-  //}
 
   img {
     object-fit: fill;
@@ -138,4 +129,10 @@ export const PreviewWrapper = styled.div`
   & > * {
     user-select: none;
   }
+`;
+
+export const Select = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 5px;
 `;

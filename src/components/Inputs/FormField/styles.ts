@@ -7,19 +7,10 @@ export const FormFieldWrapper = styled.div`
 export const Label = styled.div`
   display: flex;
   align-items: center;
-  flex: 1 0 auto;
   max-width: 100%;
   color: #ffffff;
   margin-top: 10px;
   margin-bottom: 5px;
-`;
-
-export const LabelText = styled.span`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 20px;
-  letter-spacing: 0.3px;
 `;
 
 export const RequiredField = styled.div`
@@ -75,7 +66,8 @@ export const FormContainer = styled.div<{ focus: boolean; error: boolean }>`
   box-shadow: ${({ focus }) => focus && "0 0 0 3px #aadbfc"};
 
   border-color: ${({ error }) => (error ? "#ee5951" : "")};
-  box-shadow: ${({ error }) => (error ? "0 0 0 3px #ffd7d7" : "")};
+  box-shadow: ${({ error, focus }) =>
+    error && focus ? "0 0 0 3px #ffd7d7" : ""};
 `;
 
 export const InputContainer = styled.div`

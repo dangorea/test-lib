@@ -18,8 +18,8 @@ type Props = {
   open: boolean;
   title: string | ReactElement;
   children: ReactNode | undefined;
-  handleClose: () => void;
-  onSave: () => void;
+  handleClose?: () => void;
+  onSave?: () => void;
   onDelete?: () => void;
 };
 
@@ -44,8 +44,10 @@ const ActionsSidebar: FC<Props> = ({
             <DeleteBtn onClick={onDelete}>Delete</DeleteBtn>
           </DeleteWrapper>
         )}
-        <CancelBtn onClick={handleClose}>Cancel</CancelBtn>
-        <SaveBtn onClick={onSave}>Save</SaveBtn>
+        {handleClose && title !== "Share & embed" && (
+          <CancelBtn onClick={handleClose}>Cancel</CancelBtn>
+        )}
+        {onSave && <SaveBtn onClick={onSave}>Save</SaveBtn>}
       </ActionsSidebarBottomBtns>
     </SidebarWrapper>
   );

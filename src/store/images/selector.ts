@@ -1,4 +1,4 @@
-import type { Image360, RootState } from "../types";
+import type { Image360, PaginationMetadata, RootState } from "../types";
 
 export const getIsImagesLoading =
   () =>
@@ -25,18 +25,19 @@ export const getImages =
 
 export const getImageTitles =
   (ids: string[]) =>
-  (state: any): (string | null)[] => {
+  (state: RootState): (string | null)[] => {
     return getImages(ids)(state).map((img) => img && (img.title || img.name));
   };
 
 export const getUploadProgress =
   (id: string) =>
-  (state: any): number | undefined => {
+  (state: RootState): number | undefined => {
     const progress = state.images.uploadProgress?.[id];
     return progress && progress * 100;
   };
 
 export const getImagesMetadata =
   () =>
-  (state: any): any =>
-    state.images.data.metadata;
+  ({ images }: RootState): PaginationMetadata => {
+    return images.data.metadata;
+  };

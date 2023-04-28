@@ -1,16 +1,16 @@
-// import { Box, Modal, ModalPreviewLayout } from "wix-style-react";
 import React, { FC, useCallback, useEffect, useState } from "react";
+import ModalPreview from "../../../../components/ModalPreview";
+import * as DOMPurify from "dompurify";
 import { useSelector } from "react-redux";
 import { getCurrentTour } from "../../../../store/tours/selectors";
-import type { Tour } from "../../../../store/types";
-import type { Hotspot } from "../../../../store/tours/types";
 import { getHotspotFromTour } from "../../../../utils/tour";
+import { Content, FlatSpotPreview } from "./style";
 import { CONFIG } from "../../../../utils/config";
-// import { sanitize } from "dompurify";
+import type { Hotspot } from "../../../../store/tours/types";
+import type { Tour } from "../../../../utils/types";
 
 const FlatspotImagePreview: FC = () => {
   const tour = useSelector(getCurrentTour()) as Tour;
-
   const [flatspot, setFlatspot] = useState<Hotspot | null>(null);
 
   const showFlatspotContent = useCallback(
@@ -33,49 +33,28 @@ const FlatspotImagePreview: FC = () => {
     return `${CONFIG.storageUrl}/spheres/${flatspot?.target}/preview.jpg`;
   };
 
-  const parser = new DOMParser();
-  const content = parser.parseFromString(
-    flatspot?.content as string,
-    "application/xml"
-  )?.lastElementChild?.textContent;
+  if (!flatspot) {
+    return null;
+  }
 
   return (
-    // TODO Fix here
-    <div
-      style={{
-        position: "absolute",
-        display: "block",
-        background: "red",
-        width: "100px",
-        height: "100px",
-      }}
+    <ModalPreview
+      label={flatspot?.name as string}
+      onClose={() => setFlatspot(null)}
     >
-      test
-    </div>
-    // <Modal isOpen={!!flatspot?.content}>
-    //   <ModalPreviewLayout
-    //     title={flatspot?.name}
-    //     onClose={() => setFlatspot(null)}
-    //   >
-    //     <Box verticalAlign="middle" height="100%" align="center">
-    //       <PreviewWrapper>
-    //         <img
-    //           src={getImage(flatspot as Hotspot)}
-    //           alt=""
-    //           width={flatspot?.width}
-    //           height={flatspot?.height}
-    //         />
-    //         {content && (
-    //           <Content
-    //             dangerouslySetInnerHTML={{
-    //               __html: sanitize(flatspot?.content || ""),
-    //             }}
-    //           />
-    //         )}
-    //       </PreviewWrapper>
-    //     </Box>
-    //   </ModalPreviewLayout>
-    // </Modal>
+      <FlatSpotPreview
+        src={getImage(flatspot as Hotspot)}
+        alt=""
+        width={flatspot?.width}
+        height={flatspot?.height}
+      />
+      <Content
+        open={!!flatspot.content}
+        dangerouslySetInnerHTML={{
+          __html: DOMPurify.sanitize(flatspot?.content || ""),
+        }}
+      />
+    </ModalPreview>
   );
 };
 

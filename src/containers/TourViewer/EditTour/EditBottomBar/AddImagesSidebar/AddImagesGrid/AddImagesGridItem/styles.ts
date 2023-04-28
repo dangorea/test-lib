@@ -1,11 +1,5 @@
 import styled from "styled-components";
-import trash from "../../../../assets/icons/trash.png";
-import PreviewTitle from "../../../PreviewTitle";
-export const Select = styled.div`
-  position: absolute;
-  right: 5px;
-  top: 5px;
-`;
+import trash from "../../../../../../../assets/icons/trash.png";
 
 export const DeleteBtn = styled.div<{ dark?: boolean }>`
   position: absolute;
@@ -18,28 +12,6 @@ export const DeleteBtn = styled.div<{ dark?: boolean }>`
   filter: ${({ dark }) => dark && "invert(90%)"};
 `;
 
-export const ImageTitle = styled(PreviewTitle)`
-  display: contents;
-
-  & .view {
-    position: absolute;
-    left: 10px;
-    bottom: 5px;
-    width: 70%;
-  }
-
-  & .edit {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    background-color: white;
-    z-index: 10;
-  }
-`;
-
 export const LoaderWrapper = styled.div`
   position: absolute;
   top: 45%;
@@ -49,7 +21,13 @@ export const LoaderWrapper = styled.div`
 
 export const ProgressBarWrapper = styled.div`
   position: absolute;
-  top: 67%;
+  top: 60%;
   left: 5%;
   width: 90%;
+`;
+
+export const Select = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 5px;
 `;

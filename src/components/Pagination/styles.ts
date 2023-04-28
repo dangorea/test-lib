@@ -26,11 +26,6 @@ export const PaginationItem = styled.li`
   font-size: 13px;
   min-width: 32px;
 
-  //&.dots:hover {
-  //  background-color: transparent;
-  //  cursor: default;
-  //}
-
   &:hover {
     background-color: #4eb7f5;
     cursor: pointer;
@@ -49,13 +44,6 @@ export const PaginationItem = styled.li`
     }
   }
 `;
-
-// export const Dots = styled.li`
-//   &:hover {
-//     background-color: transparent;
-//     cursor: default;
-//   }
-// `;
 
 export const Arrow = styled.div`
   &::before {

@@ -1,7 +1,8 @@
 import axios from "axios";
 import type { AnyAction, Dispatch } from "redux";
 import TOUR_CONSTANTS, { TOUR_ACTIONS } from "./constants";
-import type { FloorPlan, Icon, Level, Link, RootState, Tour } from "../types";
+import type { FloorPlan, Icon, Level, Link, RootState } from "../types";
+import type { Tour } from "../../utils/types";
 import {
   errorNotification,
   successNotification,
@@ -14,12 +15,9 @@ import type {
   ProductHotspot,
   SphereViewOptions,
 } from "./types";
-import { getHotspot } from "./selectors";
 import {
   getHotspotFromLinkHotspot,
   getHotspotFromProductHotspot,
-  getLinkToImageHotspotFromTour,
-  getProductHotspotFromTour,
   transformFullTourSphereLinks,
 } from "../../utils/tour";
 import Evaporate from "evaporate";
@@ -140,39 +138,6 @@ export const requestFullTour =
   async (dispatch: Dispatch, getState: () => RootState): Promise<void> => {
     try {
       dispatch({ type: TOUR_CONSTANTS.GET_FULL_TOUR_REQUEST });
-      // TODO remove if not used
-      // console.log("requestFullTour>>>", id);
-      // const config = <AxiosRequestConfig>{
-      //   method: "get",
-      //   url: "https://viar.live/api/v1/tour/tl9e9r?full=true",
-      //   headers: {
-      //     Authorization: "",
-      //     "Content-Type": "application/json",
-      //     "Accept-Encoding": "",
-      //   },
-      //   responseType: "json",
-      //   responseEncoding: "utf8",
-      // };
-      //
-      // axios(config)
-      //   .then(function (res) {
-      //     console.log("tst>>>>>>>>", res);
-      //     // dispatch({
-      //     //   type: TOUR_CONSTANTS.GET_FULL_TOUR_SUCCESS,
-      //     //   payload: transformFullTourSphereLinks(res.data),
-      //     // });
-      //     // dispatch(AddImages(res.data.spheres));
-      //     // if (!getState().viewer.imageId) {
-      //     //   dispatch(setViewerImageId(res.data.startingPoint.sphereId));
-      //     // }
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
-
-      // await fetch("https://viar.live/api/v1/tour/tl9e9r?full=true")
-      //       //   .then((response) => response.json())
-      //       //   .then((data) => console.log("fetchRes?>>>>>", data));
 
       const source = getState().config.source;
       CONFIG.awsBucket = getState().config.bucket;
@@ -265,7 +230,7 @@ export const manageSpheres =
       });
       dispatch({
         type: TOUR_CONSTANTS.MANAGE_SPHERES_SUCCESS,
-        payload: res.data,
+        payload: transformFullTourSphereLinks(res.data),
       });
       dispatch(successNotification("Tour updated"));
       cb?.(res.data);
@@ -314,7 +279,7 @@ export const updateHotspot =
     sphereId: string,
     hotspotId: string,
     options: Partial<Hotspot>,
-    cb?: (updatedHotspot: Hotspot) => void
+    cb?: () => void
   ) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
@@ -324,16 +289,12 @@ export const updateHotspot =
         options
       );
 
-      const updatedHotspot = getHotspot(hotspotId)({
-        tours: { currentTour: res.data },
-      } as RootState) as Hotspot;
-
       dispatch({
         type: TOUR_CONSTANTS.UPDATE_HOTSPOT_SUCCESS,
-        payload: updatedHotspot,
+        payload: transformFullTourSphereLinks(res.data),
       });
       dispatch(successNotification("Hotspot updated"));
-      cb?.(updatedHotspot);
+      cb?.();
     } catch (err) {
       if (err instanceof Error) {
         dispatch({
@@ -410,7 +371,7 @@ export const updateLinkToImageHotspot =
     sphereId: string,
     hotspotId: string,
     options: LinkHotspot,
-    cb?: (updatedHotspot: Hotspot) => void
+    cb?: () => void
   ) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
@@ -419,19 +380,12 @@ export const updateLinkToImageHotspot =
         options
       );
 
-      const updatedLinkHotspot = getLinkToImageHotspotFromTour(
-        res.data,
-        hotspotId
-      ) as LinkHotspot;
-
-      const updatedHotspot = getHotspotFromLinkHotspot(updatedLinkHotspot);
-
       dispatch({
         type: TOUR_CONSTANTS.UPDATE_HOTSPOT_SUCCESS,
-        payload: updatedHotspot,
+        payload: transformFullTourSphereLinks(res.data),
       });
       dispatch(successNotification("Hotspot updated"));
-      cb?.(updatedHotspot);
+      cb?.();
     } catch (err) {
       if (err instanceof Error) {
         dispatch({
@@ -510,7 +464,7 @@ export const updateLinkToProductHotspot =
     sphereId: string,
     hotspotId: string,
     options: ProductHotspot,
-    cb?: (updatedHotspot: Hotspot) => void
+    cb?: () => void
   ) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
@@ -519,21 +473,12 @@ export const updateLinkToProductHotspot =
         options
       );
 
-      const updatedLinkHotspot = getProductHotspotFromTour(
-        res.data,
-        hotspotId,
-        sphereId
-      ) as ProductHotspot;
-      const updatedHotspot = getHotspotFromProductHotspot({
-        ...updatedLinkHotspot,
-        // id: sphereId,
-      });
       dispatch({
         type: TOUR_CONSTANTS.UPDATE_HOTSPOT_SUCCESS,
-        payload: { ...updatedHotspot, productSphereId: sphereId },
+        payload: transformFullTourSphereLinks(res.data),
       });
       dispatch(successNotification("Hotspot updated"));
-      cb?.(updatedHotspot);
+      cb?.();
     } catch (err) {
       if (err instanceof Error) {
         dispatch({
@@ -574,21 +519,7 @@ export const deleteLinkToProductHotspot =
   };
 
 export const uploadFloorPlanLevel =
-  (
-    tourId: string,
-    file: File,
-    title: string
-    // setUploadedImage?: (
-    //   value:
-    //     | ((
-    //         prevState: FileList | Array<Level> | null
-    //       ) => FileList | Array<Level> | null)
-    //     | FileList
-    //     | Array<Level>
-    //     | null
-    // ) => void,
-    // onComplete?: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (tourId: string, file: File, title: string) =>
   async (dispatch: Dispatch, getState: () => RootState): Promise<void> => {
     try {
       dispatch({ type: c.UPLOAD_IMAGE_REQUEST });
@@ -606,13 +537,6 @@ export const uploadFloorPlanLevel =
       EVAPORATE_CONFIG.bucket = `${getState().config.bucket}/media`;
 
       const evaporate = await Evaporate.create(EVAPORATE_CONFIG);
-
-      // const addConfig: Evaporate.AddConfig = {
-      //   name: file.name,
-      //   file: file,
-      //   progress: (value) => value,
-      // };
-
       const addConfig: Evaporate.AddConfig = {
         name: file.name,
         file: file,
@@ -662,12 +586,7 @@ export const uploadFloorPlanLevel =
   };
 
 export const updateFloorPlanLevel =
-  (
-    tourId: string,
-    selectedImageId: string,
-    newTitle: string
-    // onComplete?: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (tourId: string, selectedImageId: string, newTitle: string) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
       void (await axios
@@ -676,7 +595,6 @@ export const updateFloorPlanLevel =
         })
         .then(({ data }) => {
           if (data) {
-            // onComplete?.(false);
             dispatch({
               type: TOUR_CONSTANTS.UPDATE_FLOOR_IMAGE_SUCCESS,
               payload: data,
@@ -712,15 +630,9 @@ export const deleteFloorPlanLevel =
   };
 
 export const addFloorPlanDotsToLink =
-  (
-    tourId: string,
-    selectedImage: Level,
-    dot: Link
-    // onComplete?: React.Dispatch<React.SetStateAction<boolean>>
-  ) =>
+  (tourId: string, selectedImage: Level, dot: Link) =>
   async (dispatch: Dispatch): Promise<void> => {
     try {
-      // console.log({ tourId, selectedImage, dot });
       const { data } = await axios.post<FloorPlan>(
         `${BASE_ENDPOINT}/${tourId}/level/${selectedImage?.id}/link`,
         {
@@ -774,7 +686,7 @@ export const updateFloorLevelLink =
         .then(({ data }) => {
           dispatch({
             type: TOUR_CONSTANTS.UPDATE_FLOOR_LEVEL_LINK_SUCCESS,
-            payload: data,
+            payload: transformFullTourSphereLinks(data),
           });
           // dispatch(successNotification("Hotspot updated"));
         });
@@ -871,10 +783,6 @@ export const uploadIcons =
             );
             dispatch({ type: c.UPLOAD_IMAGE_SUCCESS });
             clearInterval(interval);
-            // await requestMyImages(
-            //   metadata?.numberOfPage,
-            //   metadata?.perPage
-            // )(dispatch);
           }
         } catch (err) {
           if (err instanceof Error) {

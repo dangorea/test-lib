@@ -17,7 +17,6 @@ import TourStartingPointIcon from "../TourStartingPointIcon";
 import { SvgIconHover } from "./styles";
 import { ActionBtn } from "../UpdateCover/styles";
 import Tooltip from "../../../../../components/Tooltip";
-import CoverIcon from "../CoverIcon";
 
 const UpdateTourStartingPoint: FC = () => {
   const krpano = useSelector(getKrpanoInterface()) as Krpano;
@@ -28,6 +27,7 @@ const UpdateTourStartingPoint: FC = () => {
 
   const updateStartingPoint = useCallback(() => {
     dispatch(
+      // @ts-ignore
       updateTourStartingPoint(tourId, {
         sphereId,
         fov: +krpano.get("view.fov"),
@@ -36,6 +36,7 @@ const UpdateTourStartingPoint: FC = () => {
       })
     );
     dispatch(
+      // @ts-ignore
       setStartingPoint(
         {
           sphereId,

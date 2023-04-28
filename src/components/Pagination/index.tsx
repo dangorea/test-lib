@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
-// import { Pagination as WixPagination } from "wix-style-react";
 import { useDispatch } from "react-redux";
+import type { Dispatch } from "redux";
 import type { PaginationMetadata } from "../../store/types";
 import {
   Arrow,
@@ -8,7 +8,7 @@ import {
   PaginationItem,
   PaginationWrapper,
 } from "./styles";
-import type { Dispatch } from "redux";
+import { DOTS, usePagination } from "../../utils/hooks/usePagination";
 
 type Props = {
   requestHandler: (
@@ -16,32 +16,36 @@ type Props = {
     perPage?: number
   ) => (dispatch: Dispatch) => void;
   metadata: PaginationMetadata;
-  perPage?: number;
-  className?: string;
+  perPage: number;
 };
 
-const Pagination: FC<Props> = ({
-  requestHandler,
-  metadata,
-  perPage,
-  className,
-}) => {
-  const [selected, setSelected] = useState(1);
-  const pageNumbers = [...Array(metadata.totalPages + 1).keys()].slice(1);
+const Pagination: FC<Props> = ({ requestHandler, metadata, perPage }) => {
+  const { totalPages } = metadata;
+  const [selected, setSelected] = useState<number>(1);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(requestHandler(undefined, perPage));
-  }, [dispatch, perPage, requestHandler]);
-
-  if (!metadata) {
+  if ((totalPages && !perPage && !requestHandler) || totalPages < 2) {
     return null;
   }
 
-  const totalPages = metadata.totalPages || 1;
+  useEffect(() => {
+    dispatch(
+      // @ts-ignore
+      requestHandler(undefined, perPage)
+    );
+  }, [dispatch, perPage, requestHandler]);
+
+  const paginationRange = usePagination({
+    currentPage: selected,
+    totalCount: totalPages ? totalPages : 1,
+    siblingCount: 1,
+  });
 
   const handleChange = ({ page }: { page: number }) => {
-    dispatch(requestHandler(page - 1, perPage));
+    dispatch(
+      // @ts-ignore
+      requestHandler(page - 1, perPage)
+    );
     setSelected(page);
   };
 
@@ -49,12 +53,8 @@ const Pagination: FC<Props> = ({
     handleChange({ page: totalPages });
   }
 
-  if (metadata.totalPages < 2) {
-    return null;
-  }
-
   return (
-    <PaginationWrapper className={className}>
+    <PaginationWrapper>
       <PaginationContainer>
         <PaginationItem
           className={selected !== 1 ? "" : "disabled"}
@@ -62,15 +62,20 @@ const Pagination: FC<Props> = ({
         >
           {selected !== 1 && <Arrow className="left" />}
         </PaginationItem>
-        {pageNumbers.map((pgNumber) => (
-          <PaginationItem
-            key={pgNumber}
-            className={`${selected === pgNumber ? "selected" : ""} `}
-            onClick={() => handleChange({ page: pgNumber })}
-          >
-            {pgNumber}
-          </PaginationItem>
-        ))}
+        {paginationRange.map((pgNumber, index) => {
+          if (pgNumber === DOTS) {
+            return <li key={pgNumber + index}>&#8230;</li>;
+          }
+          return (
+            <PaginationItem
+              key={pgNumber}
+              className={`${selected === pgNumber ? "selected" : ""} `}
+              onClick={() => handleChange({ page: pgNumber as number })}
+            >
+              {pgNumber}
+            </PaginationItem>
+          );
+        })}
         <PaginationItem
           className={selected !== totalPages ? "" : "disabled"}
           onClick={() =>

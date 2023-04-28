@@ -21,9 +21,6 @@ export const popIn = keyframes`
 export const Label = styled.label`
   display: flex;
   position: relative;
-  cursor: ${(props) => {
-    return props.disabled ? "not-allowed" : "pointer";
-  }};
   font-family: "Lato", sans-serif;
   font-style: normal;
   font-weight: 400;

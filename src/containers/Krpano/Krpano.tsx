@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import KrpanoWrapper from "./KrpanoWrapper";
 import { CONFIG, EVAPORATE_CONFIG } from "../../utils/config";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -8,30 +8,32 @@ import { ErrorText, GlobalStyle, LoaderWrapper } from "./styles";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "../../store/index";
+import { TOUR_MODES } from "../../store/viewer/constants";
+import type { SUBSCRIPTION_PLAN } from "../../utils/types";
+
 React.useLayoutEffect = React.useEffect;
 
 type Source = "wix" | "viarLive";
 interface Props {
   tourId: string;
+  userConfig: SUBSCRIPTION_PLAN;
   source: Source;
+  tourMode: string;
   isWidget?: boolean;
+  onClose: () => void;
 }
 
-const Krpano = ({ tourId, source, isWidget }: Props) => {
-  // debugger;
-
-  // axios.interceptors.request.use((request) => {
-  //   console.log("Starting Request", request, null, 2);
-  //   return request;
-  // });
-  // axios.interceptors.response.use((response) => {
-  //   console.log("Response:", response, null, 2);
-  //   return response;
-  // });
-
+const Krpano: FC<Props> = ({
+  tourId,
+  userConfig,
+  source,
+  isWidget,
+  tourMode = TOUR_MODES.PREVIEW,
+  onClose,
+}) => {
   axios.defaults.baseURL =
     source === "viarLive"
-      ? "https://viar.live/api/v1/"
+      ? "https://api.test.viar.live/api/v1/"
       : "https://api.wix.viar.live/api/v1/";
 
   EVAPORATE_CONFIG.signHeaders.Authorization = axios.defaults.headers.common[
@@ -40,27 +42,11 @@ const Krpano = ({ tourId, source, isWidget }: Props) => {
 
   EVAPORATE_CONFIG.signerUrl =
     source === "viarLive"
-      ? "https://viar.live/api/v1/upload"
+      ? "https://api.test.viar.live/api/v1/upload"
       : "https://api.wix.viar.live/api/v1/upload";
 
   CONFIG.token = axios.defaults.headers.common["Authorization"] as string;
-
-  // CONFIG.awsBucket =
-  //   source === "viarLive" ? "static.a.viar.live" : "test.static.a.viar.live";
-
-  // CONFIG.apiUrl =
-  //   source === "viarLive"
-  //     ? "https://viar.live/api/v1/"
-  //     : "https://api.wix.viar.live/api/v1/";
-  // CONFIG.client = source;
-  //
-  // CONFIG.storageUrl =
-  //   source === "viarLive"
-  //     ? "https://d3m15nce7ee3px.cloudfront.net"
-  //     : "https://ddn1wrsew90bv.cloudfront.net";
-  //
-  // CONFIG.awsBucket =
-  //   source === "viarLive" ? "static.a.viar.live" : "test.static.a.viar.live";
+  CONFIG.subscriptionPlan = userConfig;
 
   if (!tourId || !source) {
     return (
@@ -77,8 +63,11 @@ const Krpano = ({ tourId, source, isWidget }: Props) => {
           <Layout>
             <KrpanoWrapper
               tourId={tourId}
+              userConfig={userConfig}
               source={source}
+              tourMode={tourMode}
               isWidget={isWidget}
+              onClose={onClose}
             />
           </Layout>
         </GlobalStyle>

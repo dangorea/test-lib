@@ -18,9 +18,7 @@ import {
   validationSchema,
   Values,
 } from "./form";
-import FormField, {
-  TypeFormField,
-} from "../../../../../components/Inputs/FormField";
+import FormField from "../../../../../components/Inputs/FormField";
 import FormColorInput from "../../../../../components/Inputs/FormColorInput";
 import { TMP_HOTSPOT, TMP_HOTSPOT_NAME } from "../constants";
 import IconSelect from "../../../../../components/IconSelect";
@@ -34,7 +32,7 @@ import { Hotspot, HOTSPOT_TYPES } from "../../../../../store/tours/types";
 import { useAddHotspot } from "../../../../../utils/hooks/useAddHotspot";
 import { getHotspotFromTour } from "../../../../../utils/tour";
 import { getCurrentTour } from "../../../../../store/tours/selectors";
-import type { Tour } from "../../../../../store/types";
+import type { Tour } from "../../../../../utils/types";
 import UpdateHotspotVals from "../UpdateHotspotVals";
 import { useRefreshHotspots } from "../../../../../utils/hooks/useRefreshHotspots";
 import { useRemoveHotspotOnImageChange } from "../../../../../utils/hooks/useRemoveHotspotOnImageChange";
@@ -106,6 +104,7 @@ const AddLink: FC<Props> = ({ open, handleOpen, handleClose }) => {
         };
 
         dispatch(
+          // @ts-ignore
           addHotspot(tourId, sphereId, data, (newHotspot) => {
             krpano.call(`removehotspot(${TMP_HOTSPOT_NAME})`);
             addViewerHotspot(newHotspot);
@@ -122,6 +121,7 @@ const AddLink: FC<Props> = ({ open, handleOpen, handleClose }) => {
         };
 
         dispatch(
+          // @ts-ignore
           updateHotspot(tourId, sphereId, vals.id, data, () => {
             handleClose();
             formikHelpers.resetForm();
@@ -168,6 +168,7 @@ const AddLink: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const onDelete = useCallback(() => {
     dispatch(
+      // @ts-ignore
       deleteHotspot(tourId, sphereId, currentHotspot.id, () => {
         krpano.call(`removehotspot(${currentHotspot.id})`);
         handleClose();
@@ -220,7 +221,6 @@ const AddLink: FC<Props> = ({ open, handleOpen, handleClose }) => {
                   label="URL"
                   name="url"
                   placeholder="Add your URL here"
-                  type={TypeFormField.URL}
                   required
                 />
                 <IconSelect

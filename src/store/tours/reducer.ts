@@ -19,7 +19,6 @@ const initialState: State = {
   error: null,
   currentTour: null,
   icons: [],
-  products: [],
 };
 
 const reducers_actions: Reducers<State> = {
@@ -85,63 +84,9 @@ const reducers_actions: Reducers<State> = {
     };
   },
   [TOUR_CONSTANTS.UPDATE_HOTSPOT_SUCCESS]: (state, payload: Hotspot) => {
-    const [sphereId] = payload.id.split("_");
-
-    const spheres = (state.currentTour as Tour).spheres;
-
-    let sphereInd = null;
-    if (payload.productSphereId) {
-      sphereInd = spheres.findIndex(({ id }) => id === payload.productSphereId);
-    } else {
-      sphereInd = spheres.findIndex(({ id }) => id === sphereId);
-    }
-
-    const sphere = spheres[sphereInd];
-    const sphereHotspotInd = sphere.hotSpots.findIndex(
-      ({ id }) => id === payload.id
-    );
-    const wixProductsHotspotInd = sphere.wixProducts.findIndex(
-      ({ id }) => id === payload.id
-    );
-    const linksHotspotInd = sphere.links.findIndex(
-      ({ id }) => id === payload.id
-    );
-
     return {
       ...state,
-      isLoading: false,
-      error: null,
-      currentTour: {
-        ...state.currentTour,
-        spheres: [
-          ...spheres.slice(0, sphereInd),
-          {
-            ...sphere,
-            links:
-              payload.type === HOTSPOT_TYPES.LINK
-                ? [
-                    ...sphere.links.slice(0, linksHotspotInd),
-                    payload,
-                    ...sphere.links.slice(linksHotspotInd + 1),
-                  ]
-                : [...sphere.links],
-            hotSpots: [
-              ...sphere.hotSpots.slice(0, sphereHotspotInd),
-              payload,
-              ...sphere.hotSpots.slice(sphereHotspotInd + 1),
-            ],
-            wixProducts:
-              payload.type === HOTSPOT_TYPES.PRODUCT
-                ? [
-                    ...sphere.wixProducts.slice(0, wixProductsHotspotInd),
-                    payload,
-                    ...sphere.wixProducts.slice(wixProductsHotspotInd + 1),
-                  ]
-                : [...sphere.wixProducts],
-          },
-          ...spheres.slice(sphereInd + 1),
-        ],
-      },
+      currentTour: payload,
     };
   },
   [TOUR_CONSTANTS.DELETE_HOTSPOT_SUCCESS]: (
@@ -248,10 +193,7 @@ const reducers_actions: Reducers<State> = {
       ...state,
       isLoading: false,
       error: null,
-      currentTour: {
-        ...state.currentTour,
-        ...payload,
-      },
+      currentTour: payload,
     };
   },
   [TOUR_CONSTANTS.DELETE_FLOOR_LEVEL_LINK_SUCCESS]: (state, payload: any) => {
@@ -330,7 +272,7 @@ const reducers_actions: Reducers<State> = {
       ...state,
       isLoading: false,
       error: null,
-      currentTour: payload,
+      currentTour: transformFullTourSphereLinks(payload),
     };
   },
   [TOUR_CONSTANTS.SET_CURRENT_TOUR_REQUEST]: requestReducer,
@@ -378,17 +320,3 @@ const toursReducer = (state = initialState, action: AnyAction): State => {
 };
 
 export default toursReducer;
-
-// export default createSlice({
-//   name: "toursReducer",
-//   initialState,
-//   reducers: {
-//     toursReducer,
-//   },
-//   extraReducers: {
-//     [HYDRATE]: (state, action) => ({
-//       ...state,
-//       ...action.payload.auth,
-//     }),
-//   },
-// });

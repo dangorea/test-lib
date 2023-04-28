@@ -1,11 +1,12 @@
 import React, { FC } from "react";
-// import { Button } from "wix-style-react";
-import { CONFIG } from "../../utils/config";
 import { isFullAccess, redirectOpenBillingPage } from "../../utils/premium";
 import { PremiumBtn } from "./styles";
+import { useSelector } from "react-redux";
+import { getUserConfig } from "../../store/config/selectors";
 
 const UpgradeButton: FC = () => {
-  if (!isFullAccess(CONFIG.subscriptionPlan.id)) {
+  const userConfig = useSelector(getUserConfig());
+  if (!isFullAccess(userConfig.id)) {
     return null;
   }
 

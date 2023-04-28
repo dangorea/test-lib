@@ -1,6 +1,7 @@
 import c from "./constants";
 import type { AnyAction } from "redux";
 import { emptySuccessReducer, errorReducer, requestReducer } from "../utils";
+import type { PaginationMetadata } from "../types";
 
 const initialState: any = {
   data: {},
@@ -15,7 +16,7 @@ const reducers: any = {
   [c.GET_MY_IMAGES_ERROR]: errorReducer,
   [c.GET_MY_IMAGES_SUCCESS]: (
     state: any,
-    payload: { page: any[]; metadata: any }
+    payload: { page: any[]; metadata: PaginationMetadata }
   ) => {
     const items: { [id: string]: any } = {};
     const page: string[] = [];
@@ -28,11 +29,11 @@ const reducers: any = {
     return {
       ...state,
       data: {
-        ...payload,
         items: {
           ...state.data.items,
           ...items,
         },
+        ...payload,
         page,
       },
       isLoading: false,
@@ -144,20 +145,3 @@ const imagesReducer = (state = initialState, action: AnyAction): any => {
 };
 
 export default imagesReducer;
-
-// export default createSlice({
-//   name: "imagesReducer",
-//   initialState,
-//   reducers: {
-//     imagesReducer,
-//   },
-//   extraReducers: {
-//     [HYDRATE]: (state, action) => {
-//       console.log("HYDRATE", { state, action });
-//       return {
-//         ...state,
-//         ...action.payload,
-//       };
-//     },
-//   },
-// });

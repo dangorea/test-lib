@@ -1,7 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
 export const SpinnerWrapper = styled.div`
-  //border: solid 1px #c1e4fe;
   background: white;
   border-radius: 8px;
   max-width: 60vh;
@@ -11,7 +10,6 @@ export const SpinnerWrapper = styled.div`
 
 export const SpinnerContainer = styled.div`
   max-width: 100%;
-  //height: 48.99vh;
   display: flex;
   align-content: center;
   justify-content: center;

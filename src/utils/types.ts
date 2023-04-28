@@ -1,3 +1,6 @@
+import type { USER_TYPES } from "./config";
+import type { TOUR_VISIBILITY } from "../store/constants/tours";
+
 export interface State extends CommonState {
   data:
     | {
@@ -115,7 +118,7 @@ export interface Image360 {
     type: SPHERE_TYPES;
     multires: string;
     tilesize: string;
-    levels: Array<{
+    levels: {
       tiledimagewidth: string;
       tiledimageheight: string;
       cube: {
@@ -127,11 +130,11 @@ export interface Image360 {
       sphere: {
         url: string;
       };
-    }>;
+    }[];
   };
   hotSpots: Hotspot[];
   links: LinkHotspot[];
-  wixProducts: Array<ProductHotspot>;
+  wixProducts: ProductHotspot[];
   startingPoint: StartingPoint;
   exif: {
     [fileInfo: string]: string;
@@ -150,19 +153,19 @@ export interface Tour {
   id: string;
   user: {
     nickname: string;
-    userType: "FREE" | "PRO";
+    userType: USER_TYPES;
   };
   createdAt: number;
   updatedAt: number;
   title: string;
   description: string;
   sphereCount: number;
-  keypoints: Array<unknown>;
-  spheres: Array<Image360>;
+  keypoints: unknown[];
+  spheres: Image360[];
   startingPoint: StartingPoint;
-  visibility: any;
+  visibility: TOUR_VISIBILITY;
   editable: boolean;
-  userTags: Array<unknown>;
+  userTags: unknown[];
   tourFloorPlan: { levels: Level[]; showHotspotTitles: boolean };
 }
 
@@ -183,52 +186,16 @@ export interface CommonState {
   error: null | string;
 }
 
-export type Product = {
-  id: string;
-  value: string;
-  media: {
-    mainMedia: {
-      image: {
-        url: string;
-      };
-    };
-  };
-  productOptions: Array<{
-    choices: Array<{
-      value: string;
-      description: string;
-      inStock: boolean;
-    }>;
-  }>;
-  name: string;
-  price: {
-    formatted: {
-      price: string;
-    };
-  };
-  description: string;
-  productPageUrl: {
-    base: string;
-    path: string;
-  };
-};
-
-export type Trial = {
-  daysOfTrialLeft: number;
-  inTrialPeriod: boolean;
-  userType: string;
-};
-
 export type Icon = {
   createdAt: number;
   id: string;
   name: string;
-  serviceTags: Array<string>;
+  serviceTags: string[];
   status: any;
   title: string;
   updatedAt: number;
   userId: string;
-  userTags: Array<string>;
+  userTags: string[];
 };
 
 export interface FloorPlan {
@@ -266,4 +233,12 @@ export type Level = {
 export type ViewerDropResult = {
   x: number;
   y: number;
+};
+
+export type SUBSCRIPTION_PLAN = {
+  id: USER_TYPES;
+  name: string;
+  sphereLimitPerTour: number;
+  tourLimit: number;
+  features: string[];
 };

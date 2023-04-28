@@ -3,10 +3,10 @@ import { useDrag } from "react-dnd";
 import { useSelector } from "react-redux";
 import { Dismiss } from "wix-ui-icons-common";
 
-import type { Image360, Tour } from "../../../../../store/types";
+import type { Image360 } from "../../../../../store/types";
+import type { Tour } from "../../../../../utils/types";
 import { getCurrentTour } from "../../../../../store/tours/selectors";
 import { getImage } from "../../../../../store/images/selector";
-
 import { ImageTitle, ImageWrapper, MoveIcon, UnlinkBtn } from "./styles";
 import { getThumbSrc } from "../../../../../utils/image";
 import ImageTitleInput from "./ImageTitleInput";

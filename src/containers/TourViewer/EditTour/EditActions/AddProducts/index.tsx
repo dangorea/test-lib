@@ -13,7 +13,7 @@ import {
   getProductById,
   updateLinkToProductHotspot,
 } from "../../../../../store/tours/actions";
-import type { Tour } from "../../../../../store/types";
+import type { Tour } from "../../../../../utils/types";
 import {
   Hotspot,
   HOTSPOT_TYPES,
@@ -106,6 +106,7 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
         };
 
         dispatch(
+          // @ts-ignore
           addLinkToProductHotspot(tourId, imageId, data, (newHotspot) => {
             krpano.call(`removehotspot(${TMP_HOTSPOT_NAME})`);
             addViewerHotspot(newHotspot);
@@ -124,6 +125,7 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
           ...commonData,
         };
         dispatch(
+          // @ts-ignore
           updateLinkToProductHotspot(tourId, imageId, vals.id, data, () => {
             handleClose();
           })
@@ -179,6 +181,7 @@ const AddProduct: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const onDelete = useCallback(() => {
     dispatch(
+      // @ts-ignore
       deleteLinkToProductHotspot(tourId, imageId, currentHotspot.id, () => {
         krpano.call(`removehotspot(${currentHotspot.id})`);
         handleClose();

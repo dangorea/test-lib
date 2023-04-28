@@ -23,7 +23,6 @@ type Props = {
   required?: boolean;
 };
 
-// Reset default Toolbar components
 const ToolbarConfig = {
   options: ["link"],
   inline: {},

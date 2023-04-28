@@ -27,6 +27,7 @@ const ImageTitleInput: FC<Props> = ({
     }
 
     dispatch(
+      // @ts-ignore
       updateImage(imageId, { title: newTitle }, () => setIsEditingTitle(false))
     );
   }, [currentTitle, dispatch, imageId, newTitle, setIsEditingTitle]);

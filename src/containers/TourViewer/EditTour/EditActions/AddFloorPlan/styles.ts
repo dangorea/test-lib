@@ -5,8 +5,16 @@ export const SvgIconHover = styled.div`
     fill: black;
   }
 
+  & #puzzle-icon {
+    fill: black;
+  }
+
   &:hover {
     & #hotspot-icon {
+      fill: white;
+    }
+
+    & #puzzle-icon {
       fill: white;
     }
   }

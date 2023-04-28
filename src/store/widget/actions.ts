@@ -32,8 +32,7 @@ export const getWidgetSettings =
         : Wix?.Utils?.getOrigCompId?.() || queryCompId;
 
       const sub = jwt_decode<JWT>(
-        // @ts-ignore
-        axios.defaults.headers.common["Authorization"]
+        axios.defaults.headers.common["Authorization"] as string
       )?.sub;
       const instanceId = sub?.split("|")[1];
 
@@ -91,8 +90,7 @@ export const updateWidgetSettings =
       const compId: string = isDev ? COMP_ID : Wix?.Utils?.getOrigCompId?.();
 
       const sub = jwt_decode<JWT>(
-        // @ts-ignore
-        axios.defaults.headers.common["Authorization"]
+        axios.defaults.headers.common["Authorization"] as string
       )?.sub;
       const instanceId = sub?.split("|")[1];
 

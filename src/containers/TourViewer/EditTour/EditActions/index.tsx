@@ -16,14 +16,19 @@ import UpdateCover from "./UpdateCover";
 import { EditActionsWrapper } from "./styles";
 import AddProducts from "./AddProducts";
 import AddProductsPremiumBtn from "./AddProductsPremiumBtn";
-import { CONFIG } from "../../../../utils/config";
+import { PROJECT } from "../../../../utils/config";
 import AddFloorPlan from "./AddFloorPlan";
 import AddFloorPlanPremiumBtn from "./AddFloorPlanPremiumBtn";
 import AddFlatImage from "./AddFlatImage";
+import { getSource, getUserConfig } from "../../../../store/config/selectors";
+import EmbedTour from "./EmbedTour";
 
 const EditActions: FC = () => {
   const [toggleAnimation, setToggleAnimation] = useState(true);
   const tourMode = useSelector(getViewerTourMode());
+  const nodeRef = useRef(null);
+  const source = useSelector(getSource());
+  const userConfig = useSelector(getUserConfig());
 
   const {
     open: openProducts,
@@ -67,12 +72,18 @@ const EditActions: FC = () => {
     handleClose: handleCloseUpdateCover,
   } = useOpen();
 
+  const {
+    open: openEmbed,
+    handleOpen: handleOpenEmbed,
+    handleClose: handleCloseEmbed,
+  } = useOpen();
+
   useEffect(() => {
     if (tourMode === TOUR_MODES.PREVIEW) {
       setToggleAnimation(false);
     }
   }, [toggleAnimation, tourMode]);
-  const nodeRef = useRef(null);
+
   return (
     <CSSTransition
       in={toggleAnimation}
@@ -82,23 +93,25 @@ const EditActions: FC = () => {
       nodeRef={nodeRef}
     >
       <EditActionsWrapper ref={nodeRef}>
-        {CONFIG.subscriptionPlan.features.includes("ECOMMERCE") ? (
-          <AddProducts
-            open={openProducts}
-            handleOpen={() => {
-              handleHotClose();
-              handleCloseLink();
-              handleCloseInfo();
-              handleCloseFlat();
-              handleCloseFloorPlan();
-              handleCloseUpdateCover();
-              handleOpenProducts();
-            }}
-            handleClose={handleCloseProducts}
-          />
-        ) : (
-          <AddProductsPremiumBtn />
-        )}
+        {/*{source === PROJECT.WIX &&*/}
+        {/*  (userConfig.features.includes("ECOMMERCE") ? (*/}
+        {/*    <AddProducts*/}
+        {/*      open={openProducts}*/}
+        {/*      handleOpen={() => {*/}
+        {/*        handleHotClose();*/}
+        {/*        handleCloseLink();*/}
+        {/*        handleCloseInfo();*/}
+        {/*        handleCloseFlat();*/}
+        {/*        handleCloseFloorPlan();*/}
+        {/*        handleCloseUpdateCover();*/}
+        {/*        handleCloseEmbed();*/}
+        {/*        handleOpenProducts();*/}
+        {/*      }}*/}
+        {/*      handleClose={handleCloseProducts}*/}
+        {/*    />*/}
+        {/*  ) : (*/}
+        {/*    <AddProductsPremiumBtn />*/}
+        {/*  ))}*/}
         <AddHotspot
           open={openHot}
           handleOpen={() => {
@@ -108,6 +121,7 @@ const EditActions: FC = () => {
             handleCloseFlat();
             handleCloseFloorPlan();
             handleCloseUpdateCover();
+            handleCloseEmbed();
             handleOpenHot();
           }}
           handleClose={handleHotClose}
@@ -121,6 +135,7 @@ const EditActions: FC = () => {
             handleHotClose();
             handleCloseFloorPlan();
             handleCloseUpdateCover();
+            handleCloseEmbed();
             handleOpenFlat();
           }}
           handleClose={handleCloseFlat}
@@ -134,6 +149,7 @@ const EditActions: FC = () => {
             handleCloseFlat();
             handleCloseFloorPlan();
             handleCloseUpdateCover();
+            handleCloseEmbed();
             handleOpenInfo();
           }}
           handleClose={handleCloseInfo}
@@ -147,6 +163,7 @@ const EditActions: FC = () => {
             handleCloseFloorPlan();
             handleCloseFlat();
             handleCloseUpdateCover();
+            handleCloseEmbed();
             handleOpenLink();
           }}
           handleClose={handleCloseLink}
@@ -160,26 +177,44 @@ const EditActions: FC = () => {
             handleCloseFloorPlan();
             handleCloseFlat();
             handleCloseLink();
+            handleCloseEmbed();
             handleOpenUpdateCover();
           }}
           handleClose={handleCloseUpdateCover}
         />
         <UpdateTourStartingPoint />
-        {CONFIG.subscriptionPlan.features.includes("FLOOR_PLAN") ? (
-          <AddFloorPlan
-            open={openFloorPlan}
+        {source === PROJECT.WIX &&
+          (userConfig.features.includes("FLOOR_PLAN") ? (
+            <AddFloorPlan
+              open={openFloorPlan}
+              handleOpen={() => {
+                handleCloseInfo();
+                handleHotClose();
+                handleCloseProducts();
+                handleCloseFlat();
+                handleCloseUpdateCover();
+                handleCloseEmbed();
+                handleOpenFloorPlan();
+              }}
+              handleClose={handleCloseFloorPlan}
+            />
+          ) : (
+            <AddFloorPlanPremiumBtn />
+          ))}
+        {source === PROJECT.VIAR_LIVE && (
+          <EmbedTour
+            open={openEmbed}
             handleOpen={() => {
               handleCloseInfo();
               handleHotClose();
               handleCloseProducts();
               handleCloseFlat();
               handleCloseUpdateCover();
-              handleOpenFloorPlan();
+              handleCloseFloorPlan();
+              handleOpenEmbed();
             }}
-            handleClose={handleCloseFloorPlan}
+            handleClose={handleCloseEmbed}
           />
-        ) : (
-          <AddFloorPlanPremiumBtn />
         )}
       </EditActionsWrapper>
     </CSSTransition>

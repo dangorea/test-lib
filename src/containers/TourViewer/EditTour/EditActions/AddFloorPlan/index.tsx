@@ -3,7 +3,6 @@ import { FormWrapper, SvgIconHover } from "./styles";
 import FloorPlanIcon from "../FloorPlanIcon/index";
 import { createPortal } from "react-dom";
 import { VIEWER_CONFIG } from "../../../../../utils/config";
-import type { Level } from "../../../../../store/types";
 import ActionModal from "../ActionModal/index";
 import { ActionBtn } from "../UpdateCover/styles";
 import Tooltip from "../../../../../components/Tooltip";
@@ -14,7 +13,6 @@ import { Form, Formik } from "formik";
 import ImageContainer from "../../../../../components/FloorPlanPreview/ImageContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { getTourId } from "../../../../../store/viewer/selectors";
-import type { Link } from "../../../../../store/types";
 import { errorNotification } from "../../../../../store/notifications/actions";
 import {
   addFloorPlanDotsToLink,
@@ -148,7 +146,6 @@ const AddFloorPlan: FC<Props> = ({ open, handleOpen, handleClose }) => {
           onSubmit={handleSubmit}
         >
           {({ submitForm, values }) => {
-            // console.log("values>>>", values);
             return (
               <ActionModal
                 open={open}

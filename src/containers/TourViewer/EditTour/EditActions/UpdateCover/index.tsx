@@ -34,6 +34,7 @@ const UpdateCover: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const updateThumb = useCallback(() => {
     dispatch(
+      // @ts-ignore
       setStartingPoint({
         sphereId,
         fov: krpano.get("view.fov"),
@@ -46,6 +47,7 @@ const UpdateCover: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const updateCover = useCallback(() => {
     dispatch(
+      // @ts-ignore
       updateTourCover(tourId, {
         sphereId,
         fov: +krpano.get("view.fov"),

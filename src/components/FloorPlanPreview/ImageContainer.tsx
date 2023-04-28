@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useEffect, useRef, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import {
   EmptyMessage,
   ImageInfo,
@@ -26,7 +26,6 @@ import {
 import loopIcon from "../../assets/icons/loopIcon.svg";
 import { useField } from "formik";
 import { CONFIG } from "../../utils/config";
-import { successNotification } from "../../store/notifications/actions";
 
 type Props = {
   name: string;
@@ -38,7 +37,7 @@ const ImageContainer: FC<Props> = ({ name, disabled }) => {
   const [levelField] = useField("level");
   const imageId = levelField.value?.id;
   // const [openPreview, setOpenPreview] = useState<boolean>(false);
-  const [imageSizes, setImageSizes] = useState<{
+  const [_imageSizes, setImageSizes] = useState<{
     width: number;
     height: number;
   }>({ width: 0, height: 0 });

@@ -79,7 +79,10 @@ const IconSelect: FC<Props> = ({ label, name, iconNames, setCurrentStyle }) => {
         ) {
           if (file.size <= 500000) {
             setUploadAction(true);
-            dispatch(uploadIcons(file, setUploadAction));
+            dispatch(
+              // @ts-ignore
+              uploadIcons(file, setUploadAction)
+            );
           } else {
             dispatch(
               errorNotification(
@@ -96,17 +99,12 @@ const IconSelect: FC<Props> = ({ label, name, iconNames, setCurrentStyle }) => {
   );
 
   const handleUnlink = useCallback(() => {
-    dispatch(deleteIcon(unlinkIcon.id, setUnlinkIcon(null)));
+    dispatch(
+      // @ts-ignore
+      deleteIcon(unlinkIcon.id)
+    );
     handleClose();
   }, [dispatch, handleClose, unlinkIcon?.id]);
-
-  // const handleClick = () => {
-  //   hiddenFileInput.current?.click();
-  // };
-  // const handleChange = (event: { target: { files: any } }) => {
-  //   const fileUploaded = event.target.files;
-  //   console.log(fileUploaded);
-  // };
 
   return (
     <IconSelectWrapper ref={wrapperRef}>
@@ -148,20 +146,6 @@ const IconSelect: FC<Props> = ({ label, name, iconNames, setCurrentStyle }) => {
           />
         </UploadBtnWrapper>
       </IconModalWrapper>
-      {/*<FileUpload*/}
-      {/*  onChange={uploadFiles}*/}
-      {/*  multiple*/}
-      {/*  accept=".jpeg,.jpg,.png"*/}
-      {/*>*/}
-      {/*  {({ openFileUploadDialog }) => (*/}
-      {/*<UploadBtnWrapper>*/}
-      {/*<Button onClick={openFileUploadDialog}>*/}
-      {/*  {!uploadAction ? "Upload a Icon" : <LoadingSpinner />}*/}
-      {/*</Button>*/}
-      {/*</UploadBtnWrapper>*/}
-      {/*  )}*/}
-      {/*</FileUpload>*/}
-      {/*</IconSelectWrapper>*/}
       <DropDownListContainer open={open}>
         <DropDownList>
           {icons.map((icon) => (
@@ -204,56 +188,6 @@ const IconSelect: FC<Props> = ({ label, name, iconNames, setCurrentStyle }) => {
         document.getElementById(VIEWER_CONFIG.MAIN_VIEWER_ID) as Element
       )}
     </IconSelectWrapper>
-
-    // TODO fix here
-    // <WixFormField label={<Text light>{label}</Text>} id={name}>
-    //   <Popover
-    //     showArrow
-    //     shown={open}
-    //     onClickOutside={handleClose}
-    //     appendTo="parent"
-    //     placement="bottom-start"
-    //   >
-    //     <Popover.Element>
-    //       <CurrentIconWrapper onClick={handleToggle}>
-    //         <CurrentIcon src={getIconSrc(field.value)} alt="" />
-    //         <ChevronDown />
-    //       </CurrentIconWrapper>
-    //     </Popover.Element>
-    //     <Popover.Content>
-    //       <IconsSelectGrid>
-    //         {iconNames.map((icon) => {
-    //           return (
-    //             <div key={icon} style={{ position: "relative" }}>
-    //               {isJsonString(icon) && (
-    //                 <IconDeleteElement
-    //                   onClick={() => {
-    //                     setUnlinkIcon(JSON.parse(icon));
-    //                   }}
-    //                 >
-    //                   <UnlinkBtn>
-    //                     <Dismiss />
-    //                   </UnlinkBtn>
-    //                 </IconDeleteElement>
-    //               )}
-    //               <IconItem
-    //                 key={icon}
-    //                 src={getIconSrc(icon)}
-    //                 alt={""}
-    //                 selected={field.value === icon}
-    //                 onClick={() => {
-    //                   helpers.setValue(icon);
-    //                   setCurrentStyle?.(icon);
-    //                   handleClose();
-    //                 }}
-    //               />
-    //             </div>
-    //           );
-    //         })}
-    //       </IconsSelectGrid>
-    //     </Popover.Content>
-    //   </Popover>
-    // </WixFormField>
   );
 };
 

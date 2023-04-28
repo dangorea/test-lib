@@ -3,9 +3,9 @@ import { AccordionContentWrapper, PreviewFPWrapper } from "./styles";
 import Accordion from "./components/Accordion";
 import { useSelector } from "react-redux";
 import { getLevels } from "../../../../store/tours/selectors";
-import { CONFIG } from "../../../../utils/config";
+// import { CONFIG } from "../../../../utils/config";
 import Chevron from "./components/Chevron";
-import ImageContainer from "../../EditTour/EditActions/AddFloorPlan/ActionModal/ImageContainer";
+// import ImageContainer from "../../EditTour/EditActions/AddFloorPlan/ActionModal/ImageContainer";
 import { getTypeOfView } from "../../../../store/viewer/selectors";
 
 const PreviewFloorPlan: FC = () => {
@@ -23,19 +23,19 @@ const PreviewFloorPlan: FC = () => {
               key={level.id}
               title={level.title || level.name}
               isImage={true}
-              // content={
-              //   <AccordionContentWrapper>
-              //     <ImageContainer
-              //       selectedImage={{
-              //         ...level,
-              //         url: `${CONFIG.storageUrl}/media/${level.id}/${level.name}`,
-              //       }}
-              //       toggle={false}
-              //       disabled
-              //       savedPosition={level.links}
-              //     />
-              //   </AccordionContentWrapper>
-              // }
+              content={
+                <AccordionContentWrapper>
+                  {/*<ImageContainer*/}
+                  {/*  selectedImage={{*/}
+                  {/*    ...level,*/}
+                  {/*    url: `${CONFIG.storageUrl}/media/${level.id}/${level.name}`,*/}
+                  {/*  }}*/}
+                  {/*  toggle={false}*/}
+                  {/*  disabled*/}
+                  {/*  savedPosition={level.links}*/}
+                  {/*/>*/}
+                </AccordionContentWrapper>
+              }
             />
           );
         })}

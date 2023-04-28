@@ -4,9 +4,9 @@ import type {
   Link,
   PaginationMetadata,
   RootState,
-  Tour,
 } from "../types";
-import type { Hotspot, State } from "./types";
+import type { Tour } from "../../utils/types";
+import type { Hotspot } from "./types";
 import type { Icon } from "../types";
 
 export const getIsToursLoading =
@@ -49,7 +49,7 @@ export const getToursMetadata =
 
 export const getCurrentTour =
   () =>
-  (state: RootState): State["currentTour"] => {
+  (state: RootState): Tour | null => {
     return state.tours.currentTour;
   };
 

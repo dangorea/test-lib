@@ -89,7 +89,10 @@ const ImageCarousel: FC<Props> = ({
                   >
                     <IconDeleteElement
                       onClick={() =>
-                        dispatch(deleteFloorPlanLevel(tourId, level.id))
+                        dispatch(
+                          // @ts-ignore
+                          deleteFloorPlanLevel(tourId, level.id)
+                        )
                       }
                     >
                       <UnlinkBtn>

@@ -13,21 +13,26 @@ import {
 } from "./styles";
 import AddIcon from "../../assets/icons/addIcon";
 import UpdateIcon from "../../assets/icons/updateIcon";
-import Tooltip from "../Tooltip";
 
 type Props = {
   height: number;
   width: number;
   imageUrl: string;
+  error: boolean;
   onUpdateImage: (e: { preventDefault: () => void }) => void;
-  // onAddImage?: () => void;
 };
 
-const ImageViewer = ({ height, width, imageUrl, onUpdateImage }: Props) => {
+const ImageViewer = ({
+  height,
+  width,
+  imageUrl,
+  onUpdateImage,
+  error,
+}: Props) => {
   const [isHover, setIsHover] = useState<boolean>(false);
 
   return (
-    <PreviewContainer>
+    <PreviewContainer error={error}>
       {!imageUrl ? (
         <AddBtn onClick={onUpdateImage}>
           <AddIconContainer>

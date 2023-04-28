@@ -5,7 +5,7 @@ import type { StyledProps } from "styled-components";
 type Position = "right" | "bottom" | "top" | "left";
 
 type Props = {
-  title: string;
+  title: string | undefined;
   children?: ReactElement | string;
   position?: Position;
   theme?: string;

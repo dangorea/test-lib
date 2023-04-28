@@ -3,7 +3,7 @@ import { getHotspotFromTour } from "../../../../utils/tour";
 import type { Hotspot } from "../../../../store/tours/types";
 import { useSelector } from "react-redux";
 import { getCurrentTour } from "../../../../store/tours/selectors";
-import type { Tour } from "../../../../store/types";
+import type { Tour } from "../../../../utils/types";
 import {
   CloseBtn,
   ContentDrawer,
@@ -11,7 +11,7 @@ import {
   RichTextPreview,
 } from "./styles";
 import Dismiss from "images/dismiss";
-import { sanitize } from "dompurify";
+import * as DOMPurify from "dompurify";
 
 const INFO_CONTENT_DRAWER_WIDTH = 540;
 
@@ -50,7 +50,7 @@ const InfospotContentDrawer: FC = () => {
       </HeaderWrapper>
       <RichTextPreview
         dangerouslySetInnerHTML={{
-          __html: sanitize(infospot?.content || ""),
+          __html: DOMPurify.sanitize(infospot?.content || ""),
         }}
       />
     </ContentDrawer>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Pagination from "../../../../../Pagination";
+import Pagination from "../../../../../../components/Pagination";
 
 export const AddImagesGridWrapper = styled.div`
   flex: 1;

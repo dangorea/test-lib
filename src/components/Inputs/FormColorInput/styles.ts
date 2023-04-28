@@ -1,9 +1,6 @@
 import styled from "styled-components";
 
-export const FormFieldWrapper = styled.div`
-  //margin-top: 10px;
-  //margin-bottom: 10px;
-`;
+export const FormFieldWrapper = styled.div``;
 
 export const Label = styled.div`
   display: flex;
@@ -109,39 +106,6 @@ export const Input = styled.input`
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
-  //font-size: 16px;
-  //box-sizing: border-box;
-  //line-height: 24px;
-  //font-weight: 400;
-  //outline: 0;
-  //box-shadow: none;
-  //overflow-block: scroll;
-  //padding: 5px 9px 5px 12px;
-  //border-radius: 6px;
-  //border: solid 1px #c1e4fe;
-  //background: #fff;
-  //width: 100%;
-  //margin-top: 5px;
-  //
-  //&::placeholder {
-  //  color: #162d3d;
-  //  font-size: 15px;
-  //  letter-spacing: 1px;
-  //  line-height: 24px;
-  //  font-weight: 400;
-  //}
-  //
-  //&:focus {
-  //  color: #162d3d;
-  //  font-size: 15px;
-  //  letter-spacing: 1px;
-  //  line-height: 24px;
-  //  font-weight: 400;
-  //}
-  //
-  //&:hover {
-  //  background: #eaf7ff;
-  //}
 `;
 
 export const ColorPickerWrapper = styled.div`

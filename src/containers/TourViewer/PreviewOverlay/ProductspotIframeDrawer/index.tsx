@@ -9,7 +9,8 @@ import { getViewerImageId } from "../../../../store/viewer/selectors";
 import { getProductById } from "../../../../store/tours/actions";
 import { CloseBtn, HeaderWrapper } from "../InfospotContentDrawer/styles";
 import { ContentDrawer, IframeBlock } from "./styles";
-import type { Product, Tour } from "../../../../store/types";
+import type { Product } from "../../../../store/types";
+import type { Tour } from "../../../../utils/types";
 import type { Hotspot } from "../../../../store/tours/types";
 
 const PRODUCT_CONTENT_DRAWER_WIDTH = window.innerWidth - 200 || 800;

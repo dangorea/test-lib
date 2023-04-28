@@ -23,7 +23,7 @@ import { useAddHotspot } from "../../../../../utils/hooks/useAddHotspot";
 import { useRemoveHotspotOnImageChange } from "../../../../../utils/hooks/useRemoveHotspotOnImageChange";
 import { getHotspotFromTour } from "../../../../../utils/tour";
 import { getCurrentTour } from "../../../../../store/tours/selectors";
-import type { Tour } from "../../../../../store/types";
+import type { Tour } from "../../../../../utils/types";
 import UpdateHotspotVals from "../UpdateHotspotVals";
 import { useRefreshHotspots } from "../../../../../utils/hooks/useRefreshHotspots";
 import FlatImageInput from "../../../../../components/Inputs/FlatImageInput";
@@ -97,6 +97,7 @@ const AddFlatImage: FC<Props> = ({ open, handleOpen, handleClose }) => {
         };
 
         dispatch(
+          // @ts-ignore
           addHotspot(tourId, sphereId, data, (newHotspot) => {
             krpano.call(`removehotspot(${TMP_HOTSPOT_NAME})`);
             addViewerHotspot(newHotspot);
@@ -111,7 +112,10 @@ const AddFlatImage: FC<Props> = ({ open, handleOpen, handleClose }) => {
           ...commonData,
         };
 
-        dispatch(updateHotspot(tourId, sphereId, vals.id, data, handleClose));
+        dispatch(
+          //@ts-ignore
+          updateHotspot(tourId, sphereId, vals.id, data, handleClose)
+        );
       }
     },
     [addViewerHotspot, dispatch, handleClose, krpano, sphereId, tour, tourId]
@@ -156,6 +160,7 @@ const AddFlatImage: FC<Props> = ({ open, handleOpen, handleClose }) => {
 
   const onDelete = useCallback(() => {
     dispatch(
+      // @ts-ignore
       deleteHotspot(tourId, sphereId, currentHotspot.id, () => {
         krpano.call(`removehotspot(${currentHotspot.id})`);
         handleClose();

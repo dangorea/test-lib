@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { Drawer } from "../../../containers/MyImages/Actionbar/UploadDrawer/styles";
-// import { Heading } from "wix-style-react";
+import { Drawer } from "../../UploadDrawer/styles";
 
 export const FormFieldWrapper = styled.div`
   margin-top: 10px;
@@ -59,4 +58,10 @@ export const SecondViewerContainer = styled.div`
     height: 100%;
     user-select: none;
   }
+`;
+
+export const Select = styled.div`
+  position: absolute;
+  right: 5px;
+  top: 5px;
 `;

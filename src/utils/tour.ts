@@ -1,6 +1,6 @@
 import type { Hotspot, LinkHotspot } from "../store/tours/types";
 import { HOTSPOT_TYPES, ProductHotspot } from "../store/tours/types";
-import type { Tour } from "../store/types";
+import type { Tour } from "./types";
 
 export const getHotspotFromTour = (
   tour: Tour,
@@ -55,15 +55,15 @@ export const getHotspotFromProductHotspot = (
 });
 
 export const transformFullTourSphereLinks = (tour: Tour): Tour => {
+  if (!tour) {
+    return tour;
+  }
   tour.spheres.forEach((sphere) => {
     const links = sphere.links.map((link) => getHotspotFromLinkHotspot(link));
-    if (sphere.hasOwnProperty("wixProducts")) {
-      const products = sphere.wixProducts.map((link) =>
-        getHotspotFromProductHotspot(link)
-      );
-      sphere.hotSpots = sphere.hotSpots.concat(links, products);
-    }
-    sphere.hotSpots = sphere.hotSpots.concat(links);
+    const products = sphere.wixProducts.map((product) =>
+      getHotspotFromProductHotspot(product)
+    );
+    sphere.hotSpots = sphere.hotSpots.concat(links, products);
   });
   return tour;
 };

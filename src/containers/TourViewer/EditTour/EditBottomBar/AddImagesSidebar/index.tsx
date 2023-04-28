@@ -22,9 +22,8 @@ import { getKrpanoInterface } from "../../../../../store/viewer/selectors";
 import { TOUR_ACTIONS } from "../../../../../store/tours/constants";
 import type { Krpano } from "../../../../../utils/config";
 import { generateInitialTourXml } from "../../../../../utils/xml";
-import UploadDrawer from "../../../../MyImages/Actionbar/UploadDrawer";
+import UploadDrawer from "../../../../../components/UploadDrawer";
 import { getCurrentTourId } from "../../../../../store/tours/selectors";
-// import { Button } from "wix-style-react";
 
 type Props = {
   open: boolean;
@@ -46,7 +45,6 @@ const AddImagesSidebar: FC<Props> = ({
   const [selected, setSelected] = useState<string[]>(selectedIds ?? []);
   const tourId = useSelector(getCurrentTourId()) as string;
   const krpano = useSelector(getKrpanoInterface()) as Krpano;
-
   const dispatch = useDispatch();
 
   const setSelectedFiles = useCallback(() => {
@@ -60,8 +58,6 @@ const AddImagesSidebar: FC<Props> = ({
       // @ts-ignore
       manageSpheres(tourId, selected, TOUR_ACTIONS.ADD, (updatedTour) => {
         setSelected([]);
-        //TODO need to change update-state logic in [MANAGE_SPHERES_SUCCESS] to avoid this request
-        // dispatch(requestFullTour(updatedTour.id));
         krpano.call(`loadxml(${generateInitialTourXml(updatedTour)})`);
         handleClose();
       })
@@ -84,17 +80,6 @@ const AddImagesSidebar: FC<Props> = ({
             <SelectedCount>{selected.length}</SelectedCount>
           )}
         </AddSelectedBtn>
-        {/*<Button*/}
-        {/*  style={{ color: !selected.length ? "#a49fa3" : "" }}*/}
-        {/*  onClick={isFromEditBar ? addSelected : setSelectedFiles}*/}
-        {/*  disabled={!selected.length}*/}
-        {/*  skin={!selected.length ? "premium-light" : "standard"}*/}
-        {/*>*/}
-        {/*  {isFromEditBar ? "Add Selected" : "Select"}*/}
-        {/*  {!!selected.length && (*/}
-        {/*    <SelectedCount>{selected.length}</SelectedCount>*/}
-        {/*  )}*/}
-        {/*</Button>*/}
       </SidebarActions>
       <AddImagesGrid selected={selected} setSelected={setSelected} />
       <SidebarActionsWrapper>

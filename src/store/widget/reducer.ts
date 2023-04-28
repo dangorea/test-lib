@@ -1,12 +1,8 @@
 import type { AnyAction } from "redux";
-
 import c from "./constants";
 import type { Reducers } from "../types";
 import type { Font, State } from "./types";
-
 import { successReducer, errorReducer, requestReducer } from "../utils";
-import { createSlice } from "@reduxjs/toolkit";
-import { HYDRATE } from "next-redux-wrapper";
 
 export const initialState: State = {
   isLoading: false,
@@ -109,20 +105,3 @@ const widgetReducer = (state = initialState, action: AnyAction): State => {
 };
 
 export default widgetReducer;
-
-// export default createSlice({
-//   name: "widgetReducer",
-//   initialState,
-//   reducers: {
-//     widgetReducer,
-//   },
-//   extraReducers: {
-//     [HYDRATE]: (state, action) => {
-//       console.log("HYDRATE", { state, action });
-//       return {
-//         ...state,
-//         ...action.payload,
-//       };
-//     },
-//   },
-// });

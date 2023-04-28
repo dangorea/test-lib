@@ -1,4 +1,5 @@
-import { Image360, SPHERE_TYPES, StartingPoint, Tour } from "./types";
+import { Image360, SPHERE_TYPES, StartingPoint } from "./types";
+import type { Tour } from "./types";
 import { CONFIG } from "./config";
 import skinsXml from "./spotsStyleXml";
 
@@ -159,7 +160,7 @@ export const generateInitialTourXml = (
 
   // todo remove debug mode
   return `
-    <krpano logkey="true" debugmode="true">
+    <krpano logkey="true" debugmode="false">
     <include url="%SWFPATH%/plugins/ios_iframe_fullscreen.xml" />
       ${skinsXml((sphereType as SPHERE_TYPES) ?? SPHERE_TYPES.CUBE)}
       ${imagesScenes}

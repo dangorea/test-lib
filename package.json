@@ -1,6 +1,6 @@
 {
-  "name": "@viarlive/editor",
-  "version": "0.0.2",
+  "name": "@dangorea/test-lib",
+  "version": "0.0.3",
   "description": "Krpano interface for ViarLive",
   "scripts": {
     "rollup": "rollup -c"
